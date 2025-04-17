@@ -1,0 +1,6 @@
+# Allow all web crawlers
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://cadenburleson.com/sitemap.xml 
