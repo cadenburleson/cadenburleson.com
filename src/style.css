@@ -1,0 +1,338 @@
+:root {
+  /* Brutalist color palette */
+  --primary-color: #E8B71A;
+  /* Gold/Yellow */
+  --secondary-color: #E8D71A;
+  /* Light Yellow */
+  --background-color: #E1D9C9;
+  /* Beige/Kraft paper */
+  --text-color: #000000;
+  /* Black */
+  --card-color: #F3E9BF;
+  /* Light beige/yellow for cards */
+  --accent-color: #000000;
+  /* Black as accent */
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+  --spacing-xl: 8rem;
+
+  /* Border and other */
+  --line-thickness: 2px;
+  --heavy-line: 6px;
+  --border-radius: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: monospace, 'Courier New', Courier;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='none' stroke='%23000000' stroke-width='0.25' stroke-opacity='0.05'/%3E%3C/svg%3E");
+  line-height: 1.4;
+  font-size: 16px;
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+#app {
+  max-width: 100%;
+}
+
+/* HEADER */
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  border-bottom: var(--heavy-line) solid black;
+  background-color: var(--background-color);
+  position: relative;
+}
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.logo a {
+  color: black;
+  font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+  font-weight: 900;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-lg);
+}
+
+nav a {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* MAIN CONTENT */
+
+.intro-section {
+  display: flex;
+  border-bottom: var(--heavy-line) solid black;
+}
+
+.intro-text {
+  flex: 7;
+  padding: var(--spacing-md);
+  font-size: 1.5rem;
+  color: #666;
+  line-height: 1.3;
+}
+
+.contact-block {
+  flex: 3;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+}
+
+/* PROJECTS SECTION */
+
+.projects-heading {
+  font-size: 8rem;
+  padding: var(--spacing-md);
+  color: var(--primary-color);
+  line-height: 0.8;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+
+.project-card {
+  background-color: var(--card-color);
+  padding: var(--spacing-md);
+  aspect-ratio: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+}
+
+.project-card:first-child {
+  background-color: #F4E9BD;
+  transform: rotate(-0.5deg);
+}
+
+.project-card:first-child:hover {
+  transform: rotate(0deg) translateY(-5px);
+}
+
+.project-card:first-child .project-card-image {
+  filter: grayscale(30%) contrast(1.2) brightness(1.05) sepia(20%);
+  opacity: 0.3;
+}
+
+.project-card:nth-child(2) {
+  background-color: #F1E7C0;
+  transform: rotate(0.7deg);
+}
+
+.project-card:nth-child(2):hover {
+  transform: rotate(0deg) translateY(-5px);
+}
+
+.project-card:nth-child(2) .project-card-image {
+  filter: grayscale(50%) contrast(1.1) brightness(1) sepia(5%);
+  opacity: 0.2;
+}
+
+.project-card:nth-child(3) {
+  background-color: #EFE4B8;
+  transform: rotate(-0.3deg);
+}
+
+.project-card:nth-child(3):hover {
+  transform: rotate(0deg) translateY(-5px);
+}
+
+.project-card:nth-child(3) .project-card-image {
+  filter: grayscale(40%) contrast(1.15) brightness(1.1) sepia(10%);
+  opacity: 0.25;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.05'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Slight paper fold effect on first card */
+.project-card:first-child::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, transparent 45%, rgba(0, 0, 0, 0.03) 50%, rgba(0, 0, 0, 0.05) 60%, transparent 70%);
+  z-index: 3;
+}
+
+/* Coffee stain effect on second card */
+.project-card:nth-child(2)::after {
+  content: '';
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(ellipse at center, rgba(160, 82, 45, 0.1) 0%, rgba(160, 82, 45, 0.07) 50%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Tape effect on third card */
+.project-card:nth-child(3)::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 15px;
+  background-color: rgba(255, 255, 255, 0.4);
+  opacity: 0.5;
+  z-index: 3;
+}
+
+.project-card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.25;
+  mix-blend-mode: multiply;
+  filter: grayscale(40%) contrast(1.1) brightness(1.1) sepia(10%);
+  z-index: 0;
+}
+
+.project-card-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 5v1H5V0zm1 5V1H2v4h4z'/%3E%3C/g%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+.project-card-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.project-title {
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  z-index: 2;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  color: #000;
+}
+
+.project-description {
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  position: relative;
+  z-index: 2;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  color: #000;
+}
+
+/* UTILITY CLASSES */
+
+.text-black {
+  color: black;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .intro-section {
+    flex-direction: column;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .projects-heading {
+    font-size: 4rem;
+  }
+
+  header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  nav ul {
+    gap: var(--spacing-md);
+  }
+}

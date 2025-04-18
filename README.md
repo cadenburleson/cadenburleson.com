@@ -1,128 +1,158 @@
-# Caden Burleson Personal Website
+# Caden Burleson Portfolio Site
 
-This is a personal website and blog built with Next.js, Tailwind CSS, and Supabase.
+A sleek, fast, and developer-friendly personal portfolio website that showcases my biography, blog, and projects.
 
 ## Features
 
-- Responsive design for all devices
-- Dynamic content management via Supabase
-- Blog with markdown support
-- Portfolio/Projects showcase
-- Fast performance with Next.js
+- **Responsive Design**: Works seamlessly on all devices
+- **Dynamic Content**: Blog posts and pages are managed via Supabase
+- **Built-in CMS**: Admin interface for content management
+- **Fast Load Times**: Vanilla JavaScript with minimal dependencies
+- **Modern UI**: Vibrant colors and engaging animations
 
 ## Tech Stack
 
-- **Frontend**: Next.js with App Router, TypeScript, Tailwind CSS
-- **Content Management**: Supabase (PostgreSQL)
+- **Frontend**: Vanilla JavaScript, CSS
+- **CMS/Backend**: Supabase
+- **Build Tool**: Vite
 - **Hosting**: Cloudflare Pages
 
-## Getting Started
+## Setup Instructions
 
 ### Prerequisites
 
-- Node.js (v18 or newer)
+- Node.js (v14 or newer)
 - npm or yarn
 - Supabase account
 
-### Installation
+### Local Development
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/cadenburleson/cadenburleson.com.git
-   cd cadenburleson.com
-   ```
+1. **Clone the repository**
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+git clone https://github.com/cadenburleson/cadenburleson.com.git
+cd cadenburleson.com
+```
 
-3. Create a `.env.local` file in the root directory with your Supabase credentials:
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
+2. **Install dependencies**
 
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
+```bash
+npm install
+```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+3. **Set up Supabase**
 
-## Supabase Setup
+Create a new Supabase project and set up the following tables:
 
-1. Create a Supabase project at [https://supabase.com](https://supabase.com)
-2. Use the SQL Editor to run the schema script in `supabase/schema.sql`
-3. Update your environment variables with the project URL and anon key
+- `posts` - Blog posts
+  - `id`: uuid (primary key)
+  - `title`: text
+  - `slug`: text (unique)
+  - `body`: text
+  - `excerpt`: text
+  - `category_id`: uuid (foreign key to categories)
+  - `created_at`: timestamp
+  - `updated_at`: timestamp
 
-## Content Management
+- `pages` - Static pages
+  - `id`: uuid (primary key)
+  - `slug`: text (unique)
+  - `title`: text
+  - `body`: text
+  - `meta_title`: text
+  - `meta_description`: text
+  - `created_at`: timestamp
+  - `updated_at`: timestamp
 
-### Blog Posts
+- `categories` - Blog categories
+  - `id`: uuid (primary key)
+  - `name`: text
+  - `slug`: text (unique)
+  - `description`: text
+  - `created_at`: timestamp
+  - `updated_at`: timestamp
 
-Posts are stored in the `posts` table with the following structure:
-- `id`: Unique identifier
-- `title`: Post title
-- `slug`: URL-friendly identifier
-- `body`: Main content (supports Markdown)
-- `excerpt`: Short summary for previews
-- `tags`: Array of tags
-- `created_at`: Publication date
-- `updated_at`: Last update date
+- `projects` - Portfolio projects
+  - `id`: uuid (primary key)
+  - `title`: text
+  - `slug`: text (unique)
+  - `description`: text
+  - `excerpt`: text
+  - `image_url`: text
+  - `tech_stack`: text
+  - `github_url`: text
+  - `live_url`: text
+  - `featured`: boolean
+  - `created_at`: timestamp
+  - `updated_at`: timestamp
 
-To add or edit posts, use the Supabase dashboard:
-1. Navigate to the Table Editor
-2. Select the `posts` table
-3. Add a new row or edit an existing one
+4. **Create environment variables**
 
-### Projects
+Create a `.env` file in the root directory and add your Supabase URL and anon key:
 
-Projects are stored in the `projects` table with the following structure:
-- `id`: Unique identifier
-- `title`: Project title
-- `slug`: URL-friendly identifier
-- `description`: Short description
-- `body`: Detailed information (supports Markdown)
-- `image`: Path to the project image
-- `tags`: Array of technologies used
-- `github_url`: Link to GitHub repository
-- `live_url`: Link to live demo
-- `featured`: Boolean flag for featured projects
-- `created_at`: Creation date
-- `updated_at`: Last update date
+```
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
 
-### Static Pages
+5. **Update Supabase configuration**
 
-Static pages like "About" or custom pages are stored in the `pages` table:
-- `id`: Unique identifier
-- `slug`: URL-friendly identifier
-- `title`: Page title
-- `body`: Page content (supports Markdown)
-- `meta_title`: SEO title
-- `meta_description`: SEO description
-- `created_at`: Creation date
-- `updated_at`: Last update date
+Open `src/main.js` and replace the placeholder Supabase credentials with the environment variables:
+
+```javascript
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+```
+
+6. **Start the development server**
+
+```bash
+npm run dev
+```
+
+7. **Open in browser**
+
+Navigate to `http://localhost:5173` in your browser.
 
 ## Deployment
 
-### Cloudflare Pages Setup
+### Cloudflare Pages
 
 1. Push your code to a GitHub repository
-2. Log in to Cloudflare Dashboard
-3. Navigate to Pages and click "Create a project"
-4. Connect your GitHub account and select the repository
-5. Configure your build settings:
+
+2. In Cloudflare Pages, create a new project and connect it to your GitHub repository
+
+3. Configure the build settings:
    - Build command: `npm run build`
-   - Build output directory: `.next`
-6. Add environment variables from your `.env.local` file
-7. Deploy
+   - Build output directory: `dist`
+   - Add environment variables from your `.env` file
+
+4. Deploy the site
+
+## Content Management
+
+### Accessing the Admin Dashboard
+
+1. Navigate to `/admin` on your site
+2. Log in with your Supabase user credentials
+
+### Managing Content
+
+- **Blog Posts**: Create, edit, and delete blog posts
+- **Pages**: Manage static pages like About, Contact, etc.
+- **Categories**: Organize blog posts into categories
+- **Projects**: Showcase your work with details and links
 
 ## Customization
 
-- Update personal information in the About page
-- Add your own projects to the projects table
-- Customize the design by modifying Tailwind classes or components
+### Styling
+
+The site's appearance can be customized by editing `src/style.css`. The color scheme is defined at the top of the file using CSS variables.
+
+### Navigation
+
+Update the navigation links in `src/components/Navigation.js`.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT 

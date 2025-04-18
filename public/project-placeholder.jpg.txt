@@ -1,0 +1,2 @@
+This is a placeholder file for a project image. 
+In a real project, you would replace this with an actual JPG image file. 
