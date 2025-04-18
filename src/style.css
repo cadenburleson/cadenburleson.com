@@ -59,6 +59,7 @@ h6 {
 
 #app {
   max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* HEADER */
@@ -70,6 +71,7 @@ header {
   border-bottom: var(--heavy-line) solid black;
   background-color: var(--background-color);
   position: relative;
+  width: 100%;
 }
 
 .logo {
@@ -102,6 +104,7 @@ nav a {
 .intro-section {
   display: flex;
   border-bottom: var(--heavy-line) solid black;
+  flex-wrap: wrap;
 }
 
 .intro-text {
@@ -110,6 +113,7 @@ nav a {
   font-size: 1.5rem;
   color: #666;
   line-height: 1.3;
+  min-width: 250px;
 }
 
 .contact-block {
@@ -122,6 +126,9 @@ nav a {
   text-transform: uppercase;
   font-weight: 900;
   font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+  min-width: 200px;
+  min-height: 150px;
+  border-left: var(--heavy-line) solid black;
 }
 
 /* PROJECTS SECTION */
@@ -131,19 +138,26 @@ nav a {
   padding: var(--spacing-md);
   color: var(--primary-color);
   line-height: 0.8;
+  width: 100%;
+  text-align: left;
+  box-sizing: border-box;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--spacing-md);
   padding: var(--spacing-md);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .project-card {
   background-color: var(--card-color);
   padding: var(--spacing-md);
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 1;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -152,6 +166,22 @@ nav a {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  min-height: 300px;
+}
+
+/* For browsers that don't support aspect-ratio */
+@supports not (aspect-ratio: 1 / 1) {
+  .project-card {
+    height: 0;
+    padding-bottom: 100%;
+  }
+
+  .project-card-content {
+    position: absolute;
+    bottom: var(--spacing-md);
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+  }
 }
 
 .project-card:hover {
@@ -160,6 +190,7 @@ nav a {
 
 .project-card:first-child {
   background-color: #F4E9BD;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
   transform: rotate(-0.5deg);
 }
 
@@ -174,6 +205,7 @@ nav a {
 
 .project-card:nth-child(2) {
   background-color: #F1E7C0;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M0 0h4v4H0V0zm0 8h4v4H0V8zm8 0h4v4H8V8zm8 0h4v4h-4V8zm0-8h4v4h-4V0z'/%3E%3C/g%3E%3C/svg%3E");
   transform: rotate(0.7deg);
 }
 
@@ -188,6 +220,7 @@ nav a {
 
 .project-card:nth-child(3) {
   background-color: #EFE4B8;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M10 0v20L0 10 10 0zm10 0L10 10l10 10V0z'/%3E%3C/g%3E%3C/svg%3E");
   transform: rotate(-0.3deg);
 }
 
@@ -200,6 +233,7 @@ nav a {
   opacity: 0.25;
 }
 
+/* Paper texture overlay */
 .project-card::before {
   content: '';
   position: absolute;
@@ -219,9 +253,9 @@ nav a {
   position: absolute;
   right: 0;
   top: 0;
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, transparent 45%, rgba(0, 0, 0, 0.03) 50%, rgba(0, 0, 0, 0.05) 60%, transparent 70%);
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, transparent 45%, rgba(0, 0, 0, 0.04) 50%, rgba(0, 0, 0, 0.07) 60%, transparent 70%);
   z-index: 3;
 }
 
@@ -229,11 +263,11 @@ nav a {
 .project-card:nth-child(2)::after {
   content: '';
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 70px;
-  height: 70px;
-  background: radial-gradient(ellipse at center, rgba(160, 82, 45, 0.1) 0%, rgba(160, 82, 45, 0.07) 50%, transparent 70%);
+  bottom: 30px;
+  right: 30px;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(ellipse at center, rgba(160, 82, 45, 0.15) 0%, rgba(160, 82, 45, 0.1) 50%, transparent 75%);
   border-radius: 50%;
   z-index: 1;
   pointer-events: none;
@@ -243,14 +277,15 @@ nav a {
 .project-card:nth-child(3)::after {
   content: '';
   position: absolute;
-  top: -5px;
+  top: -7px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 15px;
-  background-color: rgba(255, 255, 255, 0.4);
-  opacity: 0.5;
+  width: 120px;
+  height: 22px;
+  background-color: rgba(255, 255, 255, 0.5);
+  opacity: 0.6;
   z-index: 3;
+  border-radius: 3px;
 }
 
 .project-card-image {
@@ -266,6 +301,12 @@ nav a {
   z-index: 0;
 }
 
+/* Remove this to prevent duplicate labels */
+.project-card-image::before {
+  content: none;
+}
+
+/* Pattern overlay for images */
 .project-card-image::after {
   content: '';
   position: absolute;
@@ -275,6 +316,23 @@ nav a {
   height: 100%;
   background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 5v1H5V0zm1 5V1H2v4h4z'/%3E%3C/g%3E%3C/svg%3E");
   mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Card label styling */
+.card-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: monospace, 'Courier New', Courier;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: 2px 6px;
+  border-radius: 2px;
+  z-index: 3;
+  pointer-events: none;
 }
 
 .project-card-content {
@@ -314,25 +372,142 @@ nav a {
 
 /* RESPONSIVE */
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
+  .project-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+  }
+
+  .projects-heading {
+    font-size: 6rem;
+    padding: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 900px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .intro-section {
     flex-direction: column;
   }
 
+  .contact-block {
+    padding: var(--spacing-md);
+  }
+
+  .projects-heading {
+    font-size: 5rem;
+  }
+}
+
+@media (max-width: 600px) {
   .project-grid {
     grid-template-columns: 1fr;
   }
 
-  .projects-heading {
-    font-size: 4rem;
-  }
-
   header {
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--spacing-md);
   }
 
   nav ul {
     gap: var(--spacing-md);
+  }
+
+  .projects-heading {
+    font-size: 3.5rem;
+  }
+
+  .project-title {
+    font-size: 1.8rem;
+  }
+
+  .project-description {
+    font-size: 1rem;
+  }
+
+  .intro-text {
+    font-size: 1.2rem;
+  }
+
+  .contact-block {
+    font-size: 1.5rem;
+  }
+
+  /* Reduce card rotation on mobile for better fit */
+  .project-card:first-child,
+  .project-card:nth-child(2),
+  .project-card:nth-child(3) {
+    transform: rotate(0);
+  }
+
+  .project-card:hover {
+    transform: translateY(-3px);
+  }
+}
+
+/* Fix for very small screens */
+@media (max-width: 400px) {
+  :root {
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 4rem;
+  }
+
+  .logo {
+    font-size: 2rem;
+  }
+
+  nav a {
+    font-size: 1.2rem;
+  }
+
+  .projects-heading {
+    font-size: 2.5rem;
+    padding: var(--spacing-sm);
+  }
+}
+
+/* Responsive typography for project cards */
+@media (max-width: 768px) {
+  .project-title {
+    font-size: 1.8rem;
+  }
+
+  .project-description {
+    font-size: 1.1rem;
+  }
+}
+
+/* Make sure project elements stack properly on small screens */
+@media (max-width: 480px) {
+  .project-card {
+    min-height: 250px;
+  }
+
+  .card-label {
+    font-size: 0.8rem;
+  }
+
+  .project-title {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .project-description {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+}
+
+/* Additional responsive styles for very wide screens */
+@media (min-width: 1400px) {
+  .project-grid {
+    max-width: 1400px;
+    margin: 0 auto;
   }
 }
