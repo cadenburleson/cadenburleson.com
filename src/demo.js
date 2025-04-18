@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <section class="intro-section">
         <div class="intro-text">
           From post-it notes to full on SaaS products, I have the skills to bring your ideas to life. 
-          I harnes the newest technologies that are on the cutting edge of the industry. 
+          I harness the newest technologies that are on the cutting edge of the industry. 
           Soaking in the latest trends and best practices to deliver the best possible results.
         </div>
         <div class="contact-block">
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <h1 class="projects-heading">PROJECTS</h1>
         <div class="project-grid">
           <div class="project-card">
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjgwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJub25lIi8+PC9zdmc+" alt="" class="project-card-image">
+            <img src="/images/fitnit-promo.png" alt="Fitnit Fitness App" class="project-card-image">
             <div class="card-label">Fitness App</div>
             <div class="project-card-content">
               <div class="project-title">FITNIT</div>

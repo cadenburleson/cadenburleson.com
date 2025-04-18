@@ -1,157 +1,127 @@
-# Caden Burleson Portfolio Site
+# Caden Burleson Portfolio Website
 
-A sleek, fast, and developer-friendly personal portfolio website that showcases my biography, blog, and projects.
+A personal portfolio website showcasing projects, blog posts, and contact information.
 
 ## Features
 
-- **Responsive Design**: Works seamlessly on all devices
-- **Dynamic Content**: Blog posts and pages are managed via Supabase
-- **Built-in CMS**: Admin interface for content management
-- **Fast Load Times**: Vanilla JavaScript with minimal dependencies
-- **Modern UI**: Vibrant colors and engaging animations
+- **Home Page**: Introduction and featured projects
+- **About Page**: Information about skills, experience, and background
+- **Projects Page**: Portfolio of work with filtering capability
+- **Project Detail Pages**: In-depth information about each project
+- **Blog**: Collection of articles with category filtering
+- **Contact Page**: Form to send messages and contact details
 
 ## Tech Stack
 
-- **Frontend**: Vanilla JavaScript, CSS
-- **CMS/Backend**: Supabase
-- **Build Tool**: Vite
-- **Hosting**: Cloudflare Pages
+- Vanilla JavaScript
+- Vite.js for build tooling
+- Supabase for backend and database
+- CSS for styling
 
-## Setup Instructions
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or newer)
+- Node.js (v14 or later)
 - npm or yarn
-- Supabase account
+- Supabase account (for backend functionality)
 
-### Local Development
+### Installation
 
-1. **Clone the repository**
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/cadenburleson/cadenburleson.com.git
+   cd cadenburleson.com
+   ```
 
-```bash
-git clone https://github.com/cadenburleson/cadenburleson.com.git
-cd cadenburleson.com
-```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-2. **Install dependencies**
+3. Create a `.env` file in the root directory (copy from `.env.example`):
+   ```bash
+   cp .env.example .env
+   ```
 
-```bash
-npm install
-```
+4. Update the `.env` file with your Supabase credentials:
+   ```
+   VITE_SUPABASE_URL=your_supabase_url_here
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+   ```
 
-3. **Set up Supabase**
+### Supabase Setup
 
-Create a new Supabase project and set up the following tables:
+1. Create a new project in Supabase
+2. Use the SQL in `supabase/schema.sql` to set up your database tables and policies
+3. Create storage buckets for images if needed
 
-- `posts` - Blog posts
-  - `id`: uuid (primary key)
-  - `title`: text
-  - `slug`: text (unique)
-  - `body`: text
-  - `excerpt`: text
-  - `category_id`: uuid (foreign key to categories)
-  - `created_at`: timestamp
-  - `updated_at`: timestamp
+### Development
 
-- `pages` - Static pages
-  - `id`: uuid (primary key)
-  - `slug`: text (unique)
-  - `title`: text
-  - `body`: text
-  - `meta_title`: text
-  - `meta_description`: text
-  - `created_at`: timestamp
-  - `updated_at`: timestamp
-
-- `categories` - Blog categories
-  - `id`: uuid (primary key)
-  - `name`: text
-  - `slug`: text (unique)
-  - `description`: text
-  - `created_at`: timestamp
-  - `updated_at`: timestamp
-
-- `projects` - Portfolio projects
-  - `id`: uuid (primary key)
-  - `title`: text
-  - `slug`: text (unique)
-  - `description`: text
-  - `excerpt`: text
-  - `image_url`: text
-  - `tech_stack`: text
-  - `github_url`: text
-  - `live_url`: text
-  - `featured`: boolean
-  - `created_at`: timestamp
-  - `updated_at`: timestamp
-
-4. **Create environment variables**
-
-Create a `.env` file in the root directory and add your Supabase URL and anon key:
-
-```
-VITE_SUPABASE_URL=your-supabase-url
-VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
-```
-
-5. **Update Supabase configuration**
-
-Open `src/main.js` and replace the placeholder Supabase credentials with the environment variables:
-
-```javascript
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-```
-
-6. **Start the development server**
-
+Run the development server:
 ```bash
 npm run dev
 ```
 
-7. **Open in browser**
+The site will be available at `http://localhost:5173/`
 
-Navigate to `http://localhost:5173` in your browser.
+### Build for Production
 
-## Deployment
+```bash
+npm run build
+```
 
-### Cloudflare Pages
+The built files will be in the `dist` directory and can be deployed to any static hosting service.
 
-1. Push your code to a GitHub repository
+## Project Structure
 
-2. In Cloudflare Pages, create a new project and connect it to your GitHub repository
+```
+├── public/              # Static assets
+│   └── images/          # Image files
+├── src/                 # Source files
+│   ├── components/      # Reusable UI components
+│   ├── pages/           # Page components
+│   ├── main.js          # Main application entry point
+│   └── style.css        # Global styles
+├── supabase/            # Supabase configuration
+│   └── schema.sql       # Database schema
+├── index.html           # Main HTML file
+├── vite.config.js       # Vite configuration
+└── package.json         # Project dependencies and scripts
+```
 
-3. Configure the build settings:
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-   - Add environment variables from your `.env` file
+## Adding Content
 
-4. Deploy the site
+### Projects
 
-## Content Management
+Projects can be added through the Supabase database in the `projects` table. Each project should have:
 
-### Accessing the Admin Dashboard
+- `title`: Project name
+- `slug`: URL-friendly identifier
+- `category`: Project category
+- `description`: Short description
+- `full_description`: Detailed description (supports markdown)
+- `image_url`: Main project image
+- `gallery`: Array of additional images
+- `technologies`: Array of technologies used
+- `features`: Array of key features
+- `demo_url`: Link to live demo (optional)
+- `github_url`: Link to source code (optional)
+- `launch_date`: Date when project was launched
+- `featured`: Boolean to indicate if it should be featured
 
-1. Navigate to `/admin` on your site
-2. Log in with your Supabase user credentials
+### Blog Posts
 
-### Managing Content
+Blog posts can be added through the Supabase database in the `blog_posts` table. Each post should have:
 
-- **Blog Posts**: Create, edit, and delete blog posts
-- **Pages**: Manage static pages like About, Contact, etc.
-- **Categories**: Organize blog posts into categories
-- **Projects**: Showcase your work with details and links
-
-## Customization
-
-### Styling
-
-The site's appearance can be customized by editing `src/style.css`. The color scheme is defined at the top of the file using CSS variables.
-
-### Navigation
-
-Update the navigation links in `src/components/Navigation.js`.
+- `title`: Post title
+- `slug`: URL-friendly identifier
+- `excerpt`: Brief summary
+- `content`: Full post content (supports markdown)
+- `image_url`: Featured image
+- `published_at`: Publication date
+- `category`: Post category
+- `author`: Author name
 
 ## License
 
