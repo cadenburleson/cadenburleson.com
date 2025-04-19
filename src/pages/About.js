@@ -1,12 +1,12 @@
 export function renderAboutPage(container) {
-    container.innerHTML = `
+  container.innerHTML = `
     <section class="about-section">
       <div class="container">
         <h1 class="page-title">ABOUT ME</h1>
         
         <div class="about-content">
           <div class="about-image">
-            <img src="/images/placeholder.svg" alt="Caden Burleson" />
+            <img src="/images/about-pic1.png" alt="Caden Burleson" />
           </div>
           
           <div class="about-text">

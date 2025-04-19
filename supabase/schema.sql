@@ -28,7 +28,8 @@ CREATE TABLE public.blog_posts (
     published_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     category TEXT,
     author TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
 -- Create contact_messages table
@@ -42,10 +43,34 @@ CREATE TABLE public.contact_messages (
     read BOOLEAN DEFAULT false
 );
 
+-- Create pages table
+CREATE TABLE public.pages (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    body TEXT NOT NULL,
+    meta_title TEXT,
+    meta_description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- Create categories table
+CREATE TABLE public.categories (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
 -- Enable Row Level Security
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.blog_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.pages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.categories ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for projects table
 CREATE POLICY "Enable read access for all users" ON public.projects
@@ -84,4 +109,30 @@ CREATE POLICY "Enable update for authenticated users only" ON public.contact_mes
     FOR UPDATE USING (auth.role() = 'authenticated');
     
 CREATE POLICY "Enable delete for authenticated users only" ON public.contact_messages
+    FOR DELETE USING (auth.role() = 'authenticated');
+
+-- Create policies for pages table
+CREATE POLICY "Enable read access for all users" ON public.pages
+    FOR SELECT USING (true);
+    
+CREATE POLICY "Enable insert for authenticated users only" ON public.pages
+    FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+    
+CREATE POLICY "Enable update for authenticated users only" ON public.pages
+    FOR UPDATE USING (auth.role() = 'authenticated');
+    
+CREATE POLICY "Enable delete for authenticated users only" ON public.pages
+    FOR DELETE USING (auth.role() = 'authenticated');
+
+-- Create policies for categories table
+CREATE POLICY "Enable read access for all users" ON public.categories
+    FOR SELECT USING (true);
+    
+CREATE POLICY "Enable insert for authenticated users only" ON public.categories
+    FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+    
+CREATE POLICY "Enable update for authenticated users only" ON public.categories
+    FOR UPDATE USING (auth.role() = 'authenticated');
+    
+CREATE POLICY "Enable delete for authenticated users only" ON public.categories
     FOR DELETE USING (auth.role() = 'authenticated'); 

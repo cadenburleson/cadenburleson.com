@@ -50,6 +50,21 @@ A personal portfolio website showcasing projects, blog posts, and contact inform
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
    ```
 
+5. Configure EmailJS for the contact form:
+   - Sign up for an account at [EmailJS](https://www.emailjs.com/)
+   - Create an email service (e.g., Gmail, Outlook)
+   - Create an email template with the following variables:
+     - `from_name`: The sender's name
+     - `reply_to`: The sender's email
+     - `subject`: The email subject
+     - `message`: The email message content
+   - Add your EmailJS credentials to the `.env` file:
+     ```
+     VITE_EMAILJS_USER_ID=your_emailjs_user_id_here
+     VITE_EMAILJS_SERVICE_ID=your_emailjs_service_id_here
+     VITE_EMAILJS_TEMPLATE_ID=your_emailjs_template_id_here
+     ```
+
 ### Supabase Setup
 
 1. Create a new project in Supabase

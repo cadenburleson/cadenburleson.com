@@ -1,7 +1,13 @@
 import { supabase } from '../main.js';
 
+// Import EmailJS for sending emails
+import { initializeEmailJS, sendEmail } from '../utils/emailService.js';
+
 export function renderContactPage(container) {
-    container.innerHTML = `
+  // Initialize EmailJS with your user ID
+  initializeEmailJS();
+
+  container.innerHTML = `
     <section class="contact-section">
       <div class="container">
         <h1 class="page-title">CONTACT</h1>
@@ -76,65 +82,73 @@ export function renderContactPage(container) {
     </section>
   `;
 
-    // Handle form submission
-    const contactForm = document.getElementById('contact-form');
-    const formStatus = document.getElementById('form-status');
+  // Handle form submission
+  const contactForm = document.getElementById('contact-form');
+  const formStatus = document.getElementById('form-status');
 
-    if (contactForm) {
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-            // Get form data
-            const formData = new FormData(contactForm);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const subject = formData.get('subject');
-            const message = formData.get('message');
+      // Get form data
+      const formData = new FormData(contactForm);
+      const name = formData.get('name');
+      const email = formData.get('email');
+      const subject = formData.get('subject');
+      const message = formData.get('message');
 
-            if (!name || !email || !subject || !message) {
-                formStatus.textContent = 'Please fill out all fields.';
-                formStatus.classList.add('error');
-                return;
-            }
+      if (!name || !email || !subject || !message) {
+        formStatus.textContent = 'Please fill out all fields.';
+        formStatus.classList.add('error');
+        return;
+      }
 
-            // Disable form while submitting
-            const submitBtn = contactForm.querySelector('.submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
-            formStatus.textContent = '';
-            formStatus.classList.remove('success', 'error');
+      // Disable form while submitting
+      const submitBtn = contactForm.querySelector('.submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      formStatus.textContent = '';
+      formStatus.classList.remove('success', 'error');
 
-            try {
-                // Check if Supabase is initialized
-                if (supabase) {
-                    // Submit to Supabase
-                    const { error } = await supabase
-                        .from('contact_messages')
-                        .insert([
-                            { name, email, subject, message }
-                        ]);
-
-                    if (error) throw error;
-                } else {
-                    // Mock submission when Supabase is not available
-                    console.log('Form would be submitted with:', { name, email, subject, message });
-                    // Simulate network delay
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                }
-
-                // Success
-                formStatus.textContent = 'Message sent successfully! I\'ll get back to you soon.';
-                formStatus.classList.add('success');
-                contactForm.reset();
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                formStatus.textContent = 'There was an error sending your message. Please try again later.';
-                formStatus.classList.add('error');
-            } finally {
-                // Re-enable form
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Send Message';
-            }
+      try {
+        // First send the email
+        await sendEmail({
+          name,
+          email,
+          subject,
+          message
         });
-    }
+
+        // Then store in database if available
+        if (supabase) {
+          // Submit to Supabase
+          const { error } = await supabase
+            .from('contact_messages')
+            .insert([
+              { name, email, subject, message }
+            ]);
+
+          if (error) {
+            console.error('Error saving to database:', error);
+            // Continue anyway since email was sent
+          }
+        } else {
+          console.log('Database not available, but email was sent');
+        }
+
+        // Success
+        formStatus.textContent = 'Message sent successfully! I\'ll get back to you soon.';
+        formStatus.classList.add('success');
+        contactForm.reset();
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        formStatus.textContent = 'There was an error sending your message. Please try again later.';
+        formStatus.classList.add('error');
+      } finally {
+        // Re-enable form
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
+    });
+  }
 } 
