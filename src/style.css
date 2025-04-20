@@ -351,7 +351,7 @@ nav a {
 }
 
 .project-title {
-  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Marker Felt-Thin", cursive;
   font-size: 2rem;
   margin-bottom: var(--spacing-md);
   position: relative;
@@ -361,7 +361,7 @@ nav a {
 }
 
 .project-description {
-  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Marker Felt-Thin", cursive;
   font-size: 1.2rem;
   line-height: 1.3;
   position: relative;
