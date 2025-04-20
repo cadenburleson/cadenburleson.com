@@ -125,22 +125,33 @@ Grammarly, ProWritingAid, and Hemingway Editor offer different approaches to hel
 }
 
 function renderBlogPosts(container, posts) {
-  const postsHTML = posts.map(post => `
-    <article class="blog-card">
-      <div class="blog-card-image">
-        <img src="${post.image_url}" alt="${post.title}">
-      </div>
-      <div class="blog-card-content">
-        <div class="blog-card-meta">
-          <span class="blog-category">${post.category}</span>
-          <span class="blog-date">${new Date(post.published_at).toLocaleDateString()}</span>
+  // Get unique categories from actual posts
+  const categories = [...new Set(posts.map(post => post.category).filter(Boolean))];
+
+  console.log('Rendering posts:', posts);
+
+  const postsHTML = posts.map(post => {
+    // Generate the slug from the title if it doesn't exist
+    const slug = post.slug || post.title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+    console.log(`Post "${post.title}" has slug: ${slug}`);
+
+    return `
+      <article class="blog-card">
+        <div class="blog-card-image">
+          <img src="${post.image_url || '/images/placeholder.svg'}" alt="${post.title}">
         </div>
-        <h2 class="blog-title"><a href="/blog/${post.slug}">${post.title}</a></h2>
-        <p class="blog-excerpt">${post.excerpt}</p>
-        <a href="/blog/${post.slug}" class="read-more">Read More</a>
-      </div>
-    </article>
-  `).join('');
+        <div class="blog-card-content">
+          <div class="blog-card-meta">
+            <span class="blog-category">${post.category || 'Uncategorized'}</span>
+            <span class="blog-date">${new Date(post.published_at || post.created_at).toLocaleDateString()}</span>
+          </div>
+          <h2 class="blog-title"><a href="/blog/${slug}">${post.title}</a></h2>
+          <p class="blog-excerpt">${post.excerpt || ''}</p>
+          <a href="/blog/${slug}" class="read-more">READ MORE</a>
+        </div>
+      </article>
+    `;
+  }).join('');
 
   container.innerHTML = `
     <section class="blog-section">
@@ -148,10 +159,10 @@ function renderBlogPosts(container, posts) {
         <h1 class="page-title">BLOG</h1>
         
         <div class="blog-categories">
-          <button class="category-btn active" data-category="all">All</button>
-          <button class="category-btn" data-category="Web Development">Web Dev</button>
-          <button class="category-btn" data-category="Game Development">Game Dev</button>
-          <button class="category-btn" data-category="Writing">Writing</button>
+          <button class="category-btn active" data-category="all">ALL</button>
+          ${categories.map(category => `
+            <button class="category-btn" data-category="${category}">${category}</button>
+          `).join('')}
         </div>
         
         <div class="blog-grid">
@@ -189,6 +200,8 @@ function renderBlogPosts(container, posts) {
 }
 
 export async function renderBlogPostPage(container, slug) {
+  console.log('Attempting to load blog post with slug:', slug);
+
   // Show loading state
   container.innerHTML = `
     <section class="blog-post-section">
@@ -199,21 +212,70 @@ export async function renderBlogPostPage(container, slug) {
   `;
 
   try {
-    // Fetch the blog post from Supabase by slug
+    let post = null;
+
+    // Check if supabase is initialized before trying to use it
+    if (!supabase) {
+      throw new Error('Supabase is not initialized');
+    }
+
+    // First, let's log all posts to see what we have
+    const { data: allPosts, error: allPostsError } = await supabase
+      .from('blog_posts')
+      .select('*');
+
+    if (allPostsError) {
+      console.error('Error fetching all posts:', allPostsError);
+    } else {
+      console.log('All available posts:', allPosts.map(p => ({
+        id: p.id,
+        title: p.title,
+        slug: p.slug,
+        category: p.category
+      })));
+    }
+
+    // Try to find the post by slug
+    console.log('Searching for post with slug:', slug);
     const { data, error } = await supabase
       .from('blog_posts')
       .select('*')
       .eq('slug', slug)
       .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error fetching post by slug:', error);
 
-    if (!data) {
+      // If no post found by slug, try to find it by generating slug from title
+      console.log('Trying to find post by matching title...');
+      const { data: titleMatchPosts, error: titleMatchError } = await supabase
+        .from('blog_posts')
+        .select('*');
+
+      if (!titleMatchError && titleMatchPosts) {
+        post = titleMatchPosts.find(p => {
+          const generatedSlug = p.title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+          console.log(`Comparing ${generatedSlug} with ${slug}`);
+          return generatedSlug === slug;
+        });
+
+        if (post) {
+          console.log('Found post by title match:', post.title);
+        }
+      }
+    } else {
+      post = data;
+      console.log('Found post by slug:', post?.title);
+    }
+
+    if (!post) {
+      console.log('No post found for slug:', slug);
       container.innerHTML = `
         <section class="blog-post-section">
           <div class="container">
             <h1>Post Not Found</h1>
             <p>The blog post you're looking for doesn't exist.</p>
+            <p class="error-details">Looking for slug: ${slug}</p>
             <a href="/blog" class="button">Back to Blog</a>
           </div>
         </section>
@@ -221,11 +283,8 @@ export async function renderBlogPostPage(container, slug) {
       return;
     }
 
-    // Convert markdown content to HTML
-    let contentHtml = data.content;
-
     // Format date
-    const publishedDate = data.published_at || data.created_at;
+    const publishedDate = post.published_at || post.created_at;
     const formattedDate = new Date(publishedDate).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -238,30 +297,31 @@ export async function renderBlogPostPage(container, slug) {
         <div class="container">
           <div class="blog-post-header">
             <a href="/blog" class="back-link">← Back to Blog</a>
-            <h1 class="blog-post-title">${data.title}</h1>
+            <h1 class="blog-post-title">${post.title}</h1>
             <div class="blog-post-meta">
-              <span class="blog-post-category">${data.category || 'Uncategorized'}</span>
+              <span class="blog-post-category">${post.category || 'Uncategorized'}</span>
               <span class="blog-post-date">${formattedDate}</span>
             </div>
           </div>
-          ${data.image_url ? `
+          ${post.image_url ? `
             <div class="blog-post-image">
-              <img src="${data.image_url}" alt="${data.title}">
+              <img src="${post.image_url}" alt="${post.title}">
             </div>
           ` : ''}
           <div class="blog-post-content">
-            ${contentHtml}
+            ${post.content || ''}
           </div>
         </div>
       </section>
     `;
   } catch (error) {
-    console.error('Error fetching blog post:', error);
+    console.error('Error rendering blog post:', error);
     container.innerHTML = `
       <section class="blog-post-section">
         <div class="container">
           <h1>Error</h1>
           <p>Failed to load the blog post. Please try again later.</p>
+          <p class="error-details">Error: ${error.message}</p>
           <a href="/blog" class="button">Back to Blog</a>
         </div>
       </section>

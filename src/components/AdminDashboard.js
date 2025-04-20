@@ -931,6 +931,7 @@ async function showPostForm(postId = null) {
           <div class="form-group">
             <label for="slug">Slug</label>
             <input type="text" id="post-slug" name="slug" value="${post.slug}" required>
+            <small>This will be automatically updated when you change the title</small>
           </div>
           <div class="form-group">
             <label for="category">Category</label>
@@ -981,164 +982,60 @@ async function showPostForm(postId = null) {
 
     document.body.appendChild(overlay);
 
-    // Set up image preview and upload functionality
-    const imageFileInput = overlay.querySelector('#post-image-file');
-    const imageUrlInput = overlay.querySelector('#post-image-url');
-    const imagePreviewContainer = overlay.querySelector('.image-preview-container');
-    const imagePreview = overlay.querySelector('.image-preview');
-    const removeImageBtn = overlay.querySelector('.remove-image-btn');
-    const uploadProgressContainer = overlay.querySelector('.image-upload-progress');
-    const progressBar = overlay.querySelector('.progress-bar');
-    const progressText = overlay.querySelector('.progress-text');
+    // Set up form event listeners
+    const form = overlay.querySelector('#admin-post-form');
+    const titleInput = form.querySelector('#post-title');
+    const slugInput = form.querySelector('#post-slug');
 
-    // Preview selected image before upload
-    imageFileInput.addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        let progressInterval;
+    // Function to generate slug from title
+    const generateSlug = (title) => {
+      return title
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '') // Remove special characters
+        .replace(/\s+/g, '-')     // Replace spaces with hyphens
+        .replace(/-+/g, '-')      // Replace multiple hyphens with single hyphen
+        .trim();                  // Trim hyphens from start and end
+    };
 
-        try {
-          // Show upload progress
-          uploadProgressContainer.style.display = 'block';
-          progressBar.style.width = '0%';
-          progressText.textContent = 'Preparing image...';
-
-          // Start with a fast progress up to 20% to show system is working
-          progressBar.style.width = '20%';
-
-          // Create a variable to track if upload has completed
-          let uploadComplete = false;
-
-          // Use a smarter progress simulation
-          progressInterval = setInterval(() => {
-            // Don't update once complete
-            if (uploadComplete) return;
-
-            // Get current width percentage
-            const currentWidth = parseInt(progressBar.style.width) || 20;
-
-            // Apply different increment rates based on progress
-            // Move faster at beginning, slower as we approach 95%
-            let increment = 10;
-            if (currentWidth < 50) increment = 10;
-            else if (currentWidth < 70) increment = 5;
-            else if (currentWidth < 85) increment = 3;
-            else if (currentWidth < 95) increment = 1;
-            else increment = 0; // Stop at 95%
-
-            // Calculate new width (max 95%)
-            const newWidth = Math.min(95, currentWidth + increment);
-
-            // Apply new width if we haven't reached 95%
-            if (newWidth <= 95) {
-              progressBar.style.width = `${newWidth}%`;
-              progressText.textContent = `Uploading: ${newWidth}%`;
-            }
-          }, 300);
-
-          // Upload and optimize image
-          console.log('Starting image optimization and upload...');
-          const imageUrl = await optimizeAndUploadImage(file);
-          console.log('Upload completed successfully, URL:', imageUrl);
-
-          // Mark as complete to stop the interval
-          uploadComplete = true;
-
-          // Clear the progress interval
-          clearInterval(progressInterval);
-          progressInterval = null;
-
-          // Show 100% completion
-          progressBar.style.width = '100%';
-          progressText.textContent = 'Upload complete!';
-
-          // Hide progress after a moment
-          setTimeout(() => {
-            uploadProgressContainer.style.display = 'none';
-          }, 1000);
-
-          // Update preview and hidden input
-          imageUrlInput.value = imageUrl;
-          imagePreview.src = imageUrl;
-          imagePreviewContainer.style.display = 'block';
-        } catch (error) {
-          console.error('Error uploading image:', error);
-
-          // Clear the progress bar
-          if (progressInterval) {
-            clearInterval(progressInterval);
-            progressInterval = null;
-          }
-
-          // Show user-friendly error
-          uploadProgressContainer.style.display = 'block';
-          progressBar.style.width = '100%';
-          progressBar.style.backgroundColor = '#f44336';
-
-          // Provide specific error message based on error type or message
-          let errorMessage = 'Unknown error uploading image';
-
-          if (error.message) {
-            if (error.message.includes('permission') || error.message.includes('access denied')) {
-              errorMessage = 'Permission denied. Check Supabase storage rules.';
-            } else if (error.message.includes('network') || error.message.includes('fetch')) {
-              errorMessage = 'Network problem. Check your connection.';
-            } else if (error.message.includes('bucket')) {
-              errorMessage = error.message;
-            } else if (error.message.includes('too large')) {
-              errorMessage = 'Image is too large (max 5MB).';
-            } else if (error.message.includes('Failed to upload')) {
-              errorMessage = error.message;
-            } else {
-              // Use the actual error message
-              errorMessage = error.message;
-            }
-          } else if (error.statusCode === 413) {
-            errorMessage = 'Image is too large (max 5MB).';
-          }
-
-          progressText.textContent = `Error: ${errorMessage}`;
-
-          // Hide error after 8 seconds
-          setTimeout(() => {
-            uploadProgressContainer.style.display = 'none';
-            progressBar.style.backgroundColor = '#4CAF50';
-          }, 8000);
-        }
-      }
+    // Update slug when title changes
+    titleInput.addEventListener('input', () => {
+      const newSlug = generateSlug(titleInput.value);
+      slugInput.value = newSlug;
     });
 
-    // Handle remove image button
-    removeImageBtn.addEventListener('click', () => {
-      imageFileInput.value = '';
-      imageUrlInput.value = '';
-      imagePreviewContainer.style.display = 'none';
+    // Allow manual editing of slug if needed
+    slugInput.addEventListener('input', () => {
+      slugInput.value = generateSlug(slugInput.value);
     });
 
     // Handle form submission
-    const form = overlay.querySelector('#admin-post-form');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const formData = {
-        title: form.querySelector('[name="title"]').value,
-        slug: form.querySelector('[name="slug"]').value,
+        title: titleInput.value,
+        slug: slugInput.value,
         category: form.querySelector('[name="category"]').value || null,
         excerpt: form.querySelector('[name="excerpt"]').value,
         content: form.querySelector('[name="content"]').value,
         image_url: form.querySelector('[name="image_url"]').value || null
       };
 
-      if (postId) {
-        await updatePost(postId, formData);
-      } else {
-        await createPost(formData);
-      }
+      try {
+        if (postId) {
+          await updatePost(postId, formData);
+        } else {
+          await createPost(formData);
+        }
 
-      // Remove the modal
-      document.body.removeChild(overlay);
-      // Reload posts
-      loadPosts();
+        // Remove the modal
+        document.body.removeChild(overlay);
+        // Reload posts
+        loadPosts();
+      } catch (error) {
+        console.error('Error saving post:', error);
+        alert('Failed to save post: ' + (error.message || 'Unknown error'));
+      }
     });
 
     // Handle cancel button
@@ -1146,21 +1043,8 @@ async function showPostForm(postId = null) {
       document.body.removeChild(overlay);
     });
 
-    // Auto-generate slug from title for new projects
-    const titleInput = overlay.querySelector('#post-title');
-    const slugInput = overlay.querySelector('#post-slug');
-
-    titleInput.addEventListener('input', () => {
-      if (!postId) { // Only auto-generate for new projects
-        slugInput.value = titleInput.value
-          .toLowerCase()
-          .replace(/[^\w\s]/g, '')
-          .replace(/\s+/g, '-');
-      }
-    });
-
   } catch (error) {
-    console.error('Error showing project form:', error);
+    console.error('Error showing post form:', error);
     alert('Failed to load form data. Please try again.');
   }
 }

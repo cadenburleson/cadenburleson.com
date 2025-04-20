@@ -121,8 +121,21 @@ function renderProjects(container, projects) {
     };
   });
 
+  // Get unique categories from projects, preserving the exact categories
+  const categories = [...new Set(projects.map(project =>
+    project.category?.trim() || ''
+  ).filter(Boolean))];
+
+  // Generate filter buttons HTML
+  const filterButtonsHTML = `
+    <button class="filter-btn active" data-filter="all">All</button>
+    ${categories.map(category => `
+      <button class="filter-btn" data-filter="${category.toLowerCase()}">${category}</button>
+    `).join('')}
+  `;
+
   const projectsHTML = projects.map(project => `
-    <div class="project-card" data-project-id="${project.id}" data-category="${project.category?.toLowerCase() || ''}">
+    <div class="project-card" data-project-id="${project.id}" data-category="${project.category?.trim() || ''}">
       <img src="${project.image_url}" alt="${project.title}" class="project-card-image">
       <div class="card-label">${project.category}</div>
       <div class="project-card-content">
@@ -147,12 +160,11 @@ function renderProjects(container, projects) {
       <div class="container">
         <h1 class="page-title">PROJECTS</h1>
         
-        <div class="project-filters">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="web">Web</button>
-          <button class="filter-btn" data-filter="mobile">Mobile</button>
-          <button class="filter-btn" data-filter="game">Games</button>
-        </div>
+        ${projects.length > 0 ? `
+          <div class="project-filters">
+            ${filterButtonsHTML}
+          </div>
+        ` : ''}
         
         <div class="project-grid ${singleProjectClass}">
           ${emptyMessage}
@@ -175,17 +187,13 @@ function renderProjects(container, projects) {
 
         const filter = button.getAttribute('data-filter');
 
-        // Improved filtering based on data attribute
+        // Show/hide projects based on exact category match
         projectCards.forEach(card => {
           const category = card.dataset.category || '';
 
           if (filter === 'all') {
             card.style.display = 'block';
-          } else if (filter === 'web' && (category.includes('web') || category.includes('website'))) {
-            card.style.display = 'block';
-          } else if (filter === 'mobile' && (category.includes('app') || category.includes('mobile'))) {
-            card.style.display = 'block';
-          } else if (filter === 'game' && category.includes('game')) {
+          } else if (category.toLowerCase() === filter) {
             card.style.display = 'block';
           } else {
             card.style.display = 'none';
