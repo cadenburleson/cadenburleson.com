@@ -3,10 +3,12 @@ import { supabase } from '../main.js';
 export async function renderProjectsPage(container) {
   // Show loading state
   container.innerHTML = `
-    <section class="projects-section">
-      <div class="container">
-        <h1 class="page-title">PROJECTS</h1>
-        <div class="loading-indicator">Loading projects...</div>
+    <section class="rm-page">
+      <div class="rm-container">
+        <div class="rm-page-header">
+          <h1 class="rm-page-title">Work</h1>
+          <p class="rm-page-description">A selection of recent projects showcasing product design and development</p>
+        </div>
       </div>
     </section>
   `;
@@ -17,56 +19,105 @@ export async function renderProjectsPage(container) {
     // Check if supabase is initialized before trying to use it
     if (supabase) {
       console.log('Fetching projects from Supabase');
-      // Fetch projects from Supabase
       const { data, error } = await supabase
-        .from('projects')
+        .from('portfolio_projects')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error fetching projects from Supabase:', error);
-        throw error;
+        // Don't throw - fall through to mock data instead
+      } else {
+        projects = data || [];
+        console.log(`Found ${projects.length} projects in database`);
       }
-
-      projects = data || [];
-      console.log(`Found ${projects.length} projects in database`);
     } else {
       console.warn('Supabase not initialized, using mock data');
     }
 
-    // If supabase is not initialized or there are no projects in the database, use mock data
+    // If no projects in database, use mock data
     if (!projects || projects.length === 0) {
       console.log('No projects found in database, using mock data');
       projects = [
         {
           id: 1,
-          slug: 'fitnit',
-          title: 'FITNIT',
-          category: 'Fitness App',
-          description: 'AUTOMATICALLY TRACK YOUR REPS DOING VARIOUS EXERCISES.',
+          slug: 'ecommerce-platform',
+          title: 'Modern E-commerce Platform',
+          category: 'Web Application',
+          description: 'Led complete redesign of checkout flow for a fashion retail brand, reducing cart abandonment by 45% and increasing conversion rate by 40%. Implemented one-click purchasing, guest checkout, and real-time inventory updates.',
           image_url: '/images/placeholder.svg',
-          technologies: ['React Native', 'TensorFlow.js', 'Firebase'],
-          featured: true
+          technologies: ['React', 'Node.js', 'Stripe', 'PostgreSQL', 'Redis'],
+          year: '2024'
         },
         {
           id: 2,
-          slug: 'writerly',
-          title: 'WRITERLY',
-          category: 'Writing App',
-          description: 'A MINIMALIST TOOL FOR WRITERS TO ORGANIZE THEIR THOUGHTS.',
+          slug: 'mobile-banking',
+          title: 'Neo Banking App',
+          category: 'Mobile',
+          description: 'Designed and built a mobile-first banking experience for millennials and Gen Z. Features include instant transfers, bill splitting, savings goals, and spending insights. Used by 50,000+ active users.',
           image_url: '/images/placeholder.svg',
-          technologies: ['Vue.js', 'IndexedDB', 'Electron'],
-          featured: true
+          technologies: ['React Native', 'TypeScript', 'Firebase', 'Plaid'],
+          year: '2024'
         },
         {
           id: 3,
-          slug: 'retro-rpg',
-          title: 'RETRO RPG',
-          category: 'Game',
-          description: 'AN OLD-SCHOOL ROLE PLAYING GAME WITH MODERN MECHANICS.',
+          slug: 'design-system',
+          title: 'Horizon Design System',
+          category: 'Design System',
+          description: 'Created comprehensive design system for SaaS company with 15+ product teams. Includes 200+ components, design tokens, accessibility guidelines, and documentation. Reduced development time by 60%.',
           image_url: '/images/placeholder.svg',
-          technologies: ['Godot', 'GDScript', 'Aseprite'],
-          featured: true
+          technologies: ['Figma', 'React', 'Storybook', 'Design Tokens', 'TypeScript'],
+          year: '2023'
+        },
+        {
+          id: 4,
+          slug: 'saas-dashboard',
+          title: 'Analytics Dashboard',
+          category: 'Web Application',
+          description: 'Built real-time analytics platform processing 10M+ events daily. Features custom data visualization, collaborative workspaces, and automated reporting. Helping 200+ businesses make data-driven decisions.',
+          image_url: '/images/placeholder.svg',
+          technologies: ['Vue.js', 'D3.js', 'GraphQL', 'AWS', 'Lambda'],
+          year: '2023'
+        },
+        {
+          id: 5,
+          slug: 'fitness-tracker',
+          title: 'AI Fitness Companion',
+          category: 'Mobile',
+          description: 'Developed AI-powered fitness app that automatically tracks workouts using device sensors and computer vision. Provides personalized training plans, form corrections, and recovery recommendations.',
+          image_url: '/images/placeholder.svg',
+          technologies: ['Swift', 'HealthKit', 'Core ML', 'SwiftUI', 'TensorFlow'],
+          year: '2023'
+        },
+        {
+          id: 6,
+          slug: 'restaurant-booking',
+          title: 'Dine Reserve Platform',
+          category: 'Web Application',
+          description: 'Created reservation and table management system for restaurants. Handles 10,000+ monthly bookings across 50+ venues. Features include waitlist management, automated confirmations, and customer preferences.',
+          image_url: '/images/placeholder.svg',
+          technologies: ['Next.js', 'Prisma', 'Tailwind CSS', 'Twilio'],
+          year: '2022'
+        },
+        {
+          id: 7,
+          slug: 'healthcare-portal',
+          title: 'Patient Portal',
+          category: 'Web Application',
+          description: 'Designed HIPAA-compliant patient portal for healthcare network serving 100,000+ patients. Features secure messaging, appointment scheduling, medical records access, and prescription refills.',
+          image_url: '/images/placeholder.svg',
+          technologies: ['React', 'FHIR', 'AWS', 'PostgreSQL', 'OAuth'],
+          year: '2022'
+        },
+        {
+          id: 8,
+          slug: 'event-platform',
+          title: 'Virtual Events Platform',
+          category: 'Web Application',
+          description: 'Built scalable platform for hosting virtual conferences and webinars. Supports live streaming, breakout rooms, networking, and interactive Q&A. Hosted events with 50,000+ concurrent attendees.',
+          image_url: '/images/placeholder.svg',
+          technologies: ['WebRTC', 'Socket.io', 'React', 'Node.js', 'MongoDB'],
+          year: '2022'
         }
       ];
     }
@@ -75,12 +126,11 @@ export async function renderProjectsPage(container) {
   } catch (error) {
     console.error('Error rendering projects page:', error);
     container.innerHTML = `
-      <section class="projects-section">
-        <div class="container">
-          <h1 class="page-title">PROJECTS</h1>
-          <div class="error-message">
-            <p>Failed to load projects. Please try again later.</p>
-            <p>Error: ${error.message}</p>
+      <section class="rm-page">
+        <div class="rm-container">
+          <div class="rm-page-header">
+            <h1 class="rm-page-title">Work</h1>
+            <p class="rm-page-description">Unable to load projects</p>
           </div>
         </div>
       </section>
@@ -89,25 +139,21 @@ export async function renderProjectsPage(container) {
 }
 
 function renderProjects(container, projects) {
-  // Handle edge case of projects not being valid
   if (!projects || !Array.isArray(projects)) {
     console.error('Invalid projects data:', projects);
     projects = [];
   }
 
-  // Process technologies to ensure they're in the right format
+  // Process technologies
   projects = projects.map(project => {
-    // Handle different technology formats (string, array, JSON string)
     let technologies = [];
     if (project.technologies) {
       if (Array.isArray(project.technologies)) {
         technologies = project.technologies;
       } else if (typeof project.technologies === 'string') {
         try {
-          // Try parsing as JSON first
           technologies = JSON.parse(project.technologies);
         } catch (e) {
-          // If not valid JSON, assume comma-separated string
           technologies = project.technologies.split(',').map(t => t.trim());
         }
       }
@@ -115,91 +161,46 @@ function renderProjects(container, projects) {
     return {
       ...project,
       technologies,
-      // Ensure these properties have defaults
       image_url: project.image_url || '/images/placeholder.svg',
-      category: project.category || 'Project'
+      category: project.category || 'Project',
+      year: project.year || new Date(project.created_at).getFullYear() || '2024'
     };
   });
 
-  // Get unique categories from projects, preserving the exact categories
-  const categories = [...new Set(projects.map(project =>
-    project.category?.trim() || ''
-  ).filter(Boolean))];
-
-  // Generate filter buttons HTML
-  const filterButtonsHTML = `
-    <button class="filter-btn active" data-filter="all">All</button>
-    ${categories.map(category => `
-      <button class="filter-btn" data-filter="${category.toLowerCase()}">${category}</button>
-    `).join('')}
-  `;
-
   const projectsHTML = projects.map(project => `
-    <div class="project-card" data-project-id="${project.id}" data-category="${project.category?.trim() || ''}">
-      <img src="${project.image_url}" alt="${project.title}" class="project-card-image">
-      <div class="card-label">${project.category}</div>
-      <div class="project-card-content">
-        <div class="project-title">${project.title}</div>
-        <div class="project-description">${project.description}</div>
-        <div class="project-tech">
-          ${project.technologies && Array.isArray(project.technologies)
-      ? project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')
-      : ''}
+    <a href="/projects/${project.slug}" class="rm-project-item">
+      <div class="rm-project-image"></div>
+      <div class="rm-project-info">
+        <div class="rm-project-meta">
+          <span class="rm-project-category">${project.category}</span>
+          <span class="rm-project-year">${project.year}</span>
         </div>
-        <a href="/projects/${project.slug}" class="project-link">VIEW PROJECT</a>
-      </div>
-    </div>
-  `).join('');
-
-  // Add 'single-project' class to the project grid if there's only one project
-  const singleProjectClass = projects.length === 1 ? 'single-project' : '';
-  const emptyMessage = projects.length === 0 ? '<p class="no-projects-message">No projects available yet.</p>' : '';
-
-  container.innerHTML = `
-    <section class="projects-section">
-      <div class="container">
-        <h1 class="page-title">PROJECTS</h1>
-        
-        ${projects.length > 0 ? `
-          <div class="project-filters">
-            ${filterButtonsHTML}
+        <h3 class="rm-project-title">${project.title}</h3>
+        <p class="rm-project-description">${project.description}</p>
+        ${project.technologies && project.technologies.length > 0 ? `
+          <div class="rm-project-tech">
+            ${project.technologies.map(tech => `<span class="rm-tech-tag">${tech}</span>`).join('')}
           </div>
         ` : ''}
-        
-        <div class="project-grid ${singleProjectClass}">
+      </div>
+    </a>
+  `).join('');
+
+  const emptyMessage = projects.length === 0 ? '<p class="rm-empty-message">No projects available yet.</p>' : '';
+
+  container.innerHTML = `
+    <section class="rm-page">
+      <div class="rm-container">
+        <div class="rm-page-header">
+          <h1 class="rm-page-title">Work</h1>
+          <p class="rm-page-description">A selection of recent projects showcasing product design and development</p>
+        </div>
+
+        <div class="rm-projects-grid">
           ${emptyMessage}
           ${projectsHTML}
         </div>
       </div>
     </section>
   `;
-
-  // Add filter functionality only if we have projects
-  if (projects.length > 0) {
-    const filterButtons = container.querySelectorAll('.filter-btn');
-    const projectCards = container.querySelectorAll('.project-card');
-
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        // Update active button
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        const filter = button.getAttribute('data-filter');
-
-        // Show/hide projects based on exact category match
-        projectCards.forEach(card => {
-          const category = card.dataset.category || '';
-
-          if (filter === 'all') {
-            card.style.display = 'block';
-          } else if (category.toLowerCase() === filter) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-    });
-  }
 } 

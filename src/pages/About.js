@@ -1,51 +1,131 @@
-export function renderAboutPage(container) {
+import { supabase } from '../main.js';
+
+export async function renderAboutPage(container) {
   container.innerHTML = `
-    <section class="about-section">
-      <div class="container">
-        <h1 class="page-title">ABOUT ME</h1>
-        
-        <div class="about-content">
-          <div class="about-image">
-            <img src="/images/about-pic1.png" alt="Caden Burleson" />
+    <!-- About Hero Section -->
+    <section class="rm-page">
+      <div class="rm-container">
+        <div class="rm-page-header">
+          <h1 class="rm-page-title">About</h1>
+          <p class="rm-page-description">
+            Product designer and developer focused on creating exceptional digital experiences
+          </p>
+        </div>
+
+        <div class="rm-about-content">
+          <div class="rm-about-intro">
+            <p class="rm-about-lead">
+              I'm a product designer and full-stack developer who bridges the gap between design and engineering.
+              With over 8 years of experience, I've helped startups and established companies build products that
+              users love and businesses depend on.
+            </p>
           </div>
-          
-          <div class="about-text">
-            <h2>Hello, I'm Caden Burleson</h2>
-            <p>
-              I'm a multi-disciplinary creator with a passion for building digital experiences that make a difference.
-              With expertise spanning web development, writing, editing, and game development, I bring a unique blend of
-              technical skills and creative thinking to every project.
+
+          <div class="rm-about-grid">
+            <div class="rm-about-section">
+              <h2 class="rm-about-section-title">Background</h2>
+              <p class="rm-about-text">
+                My journey started in design but quickly expanded to include development. I believe the best
+                digital products come from understanding both disciplines deeply—knowing what's possible
+                technically while maintaining unwavering focus on user needs.
+              </p>
+              <p class="rm-about-text">
+                Over the years, I've worked across industries—from fintech and healthcare to e-commerce and
+                SaaS—always with the same goal: create products that solve real problems elegantly.
+              </p>
+            </div>
+
+            <div class="rm-about-section">
+              <h2 class="rm-about-section-title">Approach</h2>
+              <p class="rm-about-text">
+                I start every project with deep user research and strategic thinking. Understanding the problem
+                thoroughly is the foundation for great design. From there, I move quickly through iterative
+                prototyping and testing, refining until we have something that truly works.
+              </p>
+              <p class="rm-about-text">
+                On the development side, I prioritize clean, maintainable code and modern best practices.
+                Performance, accessibility, and scalability aren't afterthoughts—they're built in from day one.
+              </p>
+            </div>
+          </div>
+
+          <div class="rm-about-skills">
+            <h2 class="rm-about-section-title">Skills & Expertise</h2>
+
+            <div class="rm-skills-grid">
+              <div class="rm-skill-category">
+                <h3 class="rm-skill-category-title">Design</h3>
+                <ul class="rm-skill-list">
+                  <li>User Research & Testing</li>
+                  <li>UI/UX Design</li>
+                  <li>Design Systems</li>
+                  <li>Prototyping</li>
+                  <li>Information Architecture</li>
+                  <li>Interaction Design</li>
+                </ul>
+              </div>
+
+              <div class="rm-skill-category">
+                <h3 class="rm-skill-category-title">Development</h3>
+                <ul class="rm-skill-list">
+                  <li>React & Vue.js</li>
+                  <li>Node.js & Express</li>
+                  <li>TypeScript</li>
+                  <li>REST & GraphQL APIs</li>
+                  <li>PostgreSQL & MongoDB</li>
+                  <li>AWS & Cloud Services</li>
+                </ul>
+              </div>
+
+              <div class="rm-skill-category">
+                <h3 class="rm-skill-category-title">Tools</h3>
+                <ul class="rm-skill-list">
+                  <li>Figma & Sketch</li>
+                  <li>Git & GitHub</li>
+                  <li>Storybook</li>
+                  <li>Jest & Testing Library</li>
+                  <li>Docker</li>
+                  <li>CI/CD Pipelines</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="rm-about-values">
+            <h2 class="rm-about-section-title">Values</h2>
+            <div class="rm-values-grid">
+              <div class="rm-value-card">
+                <h3>User-Centered</h3>
+                <p>Every decision starts with understanding user needs and validating assumptions through research and testing.</p>
+              </div>
+              <div class="rm-value-card">
+                <h3>Quality Focused</h3>
+                <p>Attention to detail matters. From pixel-perfect interfaces to clean, maintainable code—quality is non-negotiable.</p>
+              </div>
+              <div class="rm-value-card">
+                <h3>Collaborative</h3>
+                <p>The best work happens when design and development work together, involving stakeholders throughout the process.</p>
+              </div>
+              <div class="rm-value-card">
+                <h3>Pragmatic</h3>
+                <p>Beautiful design must meet business goals and technical constraints. I balance idealism with practical reality.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rm-about-cta">
+            <h2 class="rm-about-section-title">Let's Work Together</h2>
+            <p class="rm-about-text">
+              I'm always interested in new projects and collaborations. Whether you need a complete product
+              design, development support, or strategic guidance—let's talk.
             </p>
-            
-            <h3>My Approach</h3>
-            <p>
-              I believe in creating solutions that are not only functional but also intuitive and enjoyable to use.
-              By staying current with industry trends and technologies, I ensure that my work is always at the cutting edge.
-            </p>
-            
-            <h3>Skills & Expertise</h3>
-            <ul class="skills-list">
-              <li>Front-end Development (React, Vue, Vanilla JS)</li>
-              <li>Back-end Development (Node.js, Express, Supabase)</li>
-              <li>Game Development (Unity, Godot)</li>
-              <li>Content Creation & Editing</li>
-              <li>User Experience Design</li>
-              <li>Project Management</li>
-            </ul>
-            
-            <h3>Education</h3>
-            <p>
-              Bachelor of Arts in Creative Writing & Computer Science<br>
-              University of Technology, Class of 2020
-            </p>
-            
-            <div class="cta-section">
-              <a href="/contact" class="cta-button">Get in Touch</a>
-              <a href="/projects" class="cta-button secondary">View My Work</a>
+            <div class="rm-about-cta-buttons">
+              <a href="/contact" class="rm-btn rm-btn-primary rm-btn-large">Get in Touch</a>
+              <a href="/projects" class="rm-btn rm-btn-secondary rm-btn-large">View My Work</a>
             </div>
           </div>
         </div>
       </div>
     </section>
   `;
-} 
+}

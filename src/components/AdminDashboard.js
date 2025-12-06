@@ -668,7 +668,7 @@ async function loadProjects() {
 
   try {
     const { data, error } = await supabase
-      .from('projects')
+      .from('portfolio_projects')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -1209,7 +1209,7 @@ async function createProject(formData) {
     const { live_url, ...safeFormData } = formData;
 
     const { data, error } = await supabase
-      .from('projects')
+      .from('portfolio_projects')
       .insert([safeFormData])
       .select();
 
@@ -1228,7 +1228,7 @@ async function updateProject(projectId, formData) {
     const { live_url, ...safeFormData } = formData;
 
     const { data, error } = await supabase
-      .from('projects')
+      .from('portfolio_projects')
       .update(safeFormData)
       .eq('id', projectId)
       .select();
@@ -1245,7 +1245,7 @@ async function updateProject(projectId, formData) {
 async function deleteProject(projectId) {
   try {
     const { error } = await supabase
-      .from('projects')
+      .from('portfolio_projects')
       .delete()
       .eq('id', projectId);
 
@@ -1443,7 +1443,7 @@ async function showProjectForm(projectId = null) {
     // If editing, get the project data
     if (projectId) {
       const { data, error } = await supabase
-        .from('projects')
+        .from('portfolio_projects')
         .select('*')
         .eq('id', projectId)
         .single();

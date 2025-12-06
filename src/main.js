@@ -1,5 +1,11 @@
 import './style.css'
 import { createClient } from '@supabase/supabase-js'
+import { renderHomePage } from './pages/Home.js'
+import { renderProjectsPage } from './pages/Projects.js'
+import { renderProjectDetailPage } from './pages/ProjectDetail.js'
+import { renderBlogPage, renderBlogPostPage } from './pages/Blog.js'
+import { renderAboutPage } from './pages/About.js'
+import { renderContactPage } from './pages/Contact.js'
 
 // Initialize Supabase client
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
@@ -11,23 +17,54 @@ function renderNav() {
   return `
     <nav class="nav">
       <div class="nav-content">
-        <a href="/" class="nav-logo">CB</a>
+        <a href="/" class="nav-logo">
+          <span class="logo-icon"></span>
+          <span class="logo-text">Devanta<br/>Ebison</span>
+        </a>
+        <button class="nav-hamburger" aria-label="Toggle navigation menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
         <ul class="nav-links">
-          <li><a href="/projects">Projects</a></li>
-          <li><a href="/blog">Blog</a></li>
+          <li><a href="/projects">Work</a></li>
           <li><a href="/about">About</a></li>
+          <li><a href="/blog">Blog</a></li>
           <li><a href="/contact">Contact</a></li>
-          <li><a href="/admin" class="admin-link">Admin</a></li>
         </ul>
       </div>
     </nav>
   `
 }
 
-// Fetch projects from Supabase
+// Toggle mobile navigation
+function initMobileNav() {
+  const hamburger = document.querySelector('.nav-hamburger')
+  const navLinks = document.querySelector('.nav-links')
+
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active')
+      navLinks.classList.toggle('active')
+      document.body.classList.toggle('nav-open')
+    })
+
+    // Close menu when clicking a link
+    const links = navLinks.querySelectorAll('a')
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active')
+        navLinks.classList.remove('active')
+        document.body.classList.remove('nav-open')
+      })
+    })
+  }
+}
+
+// Keep old functions for backward compatibility but they won't be used
 async function fetchProjects() {
   const { data: projects, error } = await supabase
-    .from('projects')
+    .from('portfolio_projects')
     .select('*')
     .order('created_at', { ascending: false })
 
@@ -39,10 +76,9 @@ async function fetchProjects() {
   return projects
 }
 
-// Fetch single project from Supabase
 async function fetchProject(slug) {
   const { data: project, error } = await supabase
-    .from('projects')
+    .from('portfolio_projects')
     .select('*')
     .eq('slug', slug)
     .single()
@@ -55,7 +91,6 @@ async function fetchProject(slug) {
   return project
 }
 
-// Fetch blog posts from Supabase
 async function fetchBlogPosts() {
   const { data: posts, error } = await supabase
     .from('blog_posts')
@@ -70,7 +105,6 @@ async function fetchBlogPosts() {
   return posts
 }
 
-// Fetch single blog post from Supabase
 async function fetchBlogPost(slug) {
   const { data: post, error } = await supabase
     .from('blog_posts')
@@ -86,7 +120,6 @@ async function fetchBlogPost(slug) {
   return post
 }
 
-// Format date helper
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -95,7 +128,6 @@ function formatDate(dateString) {
   })
 }
 
-// Render projects grid
 function renderProjects(projects) {
   if (!projects.length) {
     return '<div class="loading">No projects found</div>'
@@ -113,7 +145,6 @@ function renderProjects(projects) {
   `
 }
 
-// Render project detail page
 function renderProjectDetail(project) {
   if (!project) {
     return '<div class="loading">Project not found</div>'
@@ -180,7 +211,6 @@ function renderProjectDetail(project) {
   `
 }
 
-// Render blog posts grid
 function renderBlogPosts(posts) {
   if (!posts.length) {
     return '<div class="loading">No blog posts found</div>'
@@ -202,7 +232,6 @@ function renderBlogPosts(posts) {
   `
 }
 
-// Render blog post detail
 function renderBlogPost(post) {
   if (!post) {
     return '<div class="loading">Blog post not found</div>'
@@ -227,91 +256,54 @@ export { supabase }
 async function handleRoute() {
   const app = document.querySelector('#app')
   const path = window.location.pathname
-  const projectSlug = path.match(/^\/project\/([^/]+)/)?.[1]
-  const blogPostSlug = path.match(/^\/blog\/([^/]+)/)?.[1]
+  const projectSlug = path.match(/^\/projects\/([^/]+)/)?.[1]
+  const blogSlug = path.match(/^\/blog\/([^/]+)/)?.[1]
 
-  // Add navigation to all pages except admin
-  if (path !== '/admin') {
-    app.innerHTML = renderNav()
-  }
+  // Create a container for navigation and content
+  let pageContent = renderNav()
 
-  if (path === '/admin') {
-    // Admin page
-    const { initAdmin } = await import('./pages/Admin.js')
-    app.innerHTML = '<div class="admin-container"></div>'
-    const adminContainer = app.querySelector('.admin-container')
-    await initAdmin(adminContainer)
-  } else if (path === '/projects' || path === '/') {
+  if (path === '/' || path === '/home') {
+    // Home page
+    await renderHomePage(app)
+  } else if (path === '/about') {
+    // About page
+    await renderAboutPage(app)
+  } else if (path === '/contact') {
+    // Contact page
+    await renderContactPage(app)
+  } else if (path === '/projects' && !projectSlug) {
     // Projects listing page
-    app.innerHTML += `
-      <div class="hero">
-        <h1>${path === '/' ? 'CADEN BURLESON' : 'PROJECTS'}</h1>
-      </div>
-      <section class="projects-section">
-        <div class="loading">Loading projects...</div>
-      </section>
-    `
-    try {
-      const projects = await fetchProjects()
-      const projectsSection = app.querySelector('.projects-section')
-      projectsSection.innerHTML = renderProjects(projects)
-    } catch (error) {
-      console.error('Error:', error)
-      const projectsSection = app.querySelector('.projects-section')
-      projectsSection.innerHTML = '<div class="loading">Error loading projects</div>'
-    }
+    await renderProjectsPage(app)
   } else if (projectSlug) {
     // Project detail page
-    app.innerHTML += `
-      <section class="projects-section">
-        <div class="loading">Loading project...</div>
-      </section>
-    `
-    try {
-      const project = await fetchProject(projectSlug)
-      const projectsSection = app.querySelector('.projects-section')
-      projectsSection.innerHTML = renderProjectDetail(project)
-    } catch (error) {
-      console.error('Error:', error)
-      const projectsSection = app.querySelector('.projects-section')
-      projectsSection.innerHTML = '<div class="loading">Error loading project</div>'
-    }
-  } else if (path === '/blog') {
+    await renderProjectDetailPage(app, projectSlug)
+  } else if (path === '/blog' && !blogSlug) {
     // Blog listing page
-    app.innerHTML += `
-      <div class="hero">
-        <h1>BLOG</h1>
-      </div>
-      <section class="blog-section">
-        <div class="loading">Loading blog posts...</div>
-      </section>
-    `
-    try {
-      const posts = await fetchBlogPosts()
-      const blogSection = app.querySelector('.blog-section')
-      blogSection.innerHTML = renderBlogPosts(posts)
-    } catch (error) {
-      console.error('Error:', error)
-      const blogSection = app.querySelector('.blog-section')
-      blogSection.innerHTML = '<div class="loading">Error loading blog posts</div>'
-    }
-  } else if (blogPostSlug) {
+    await renderBlogPage(app)
+  } else if (blogSlug) {
     // Blog post detail page
-    app.innerHTML += `
-      <section class="blog-section">
-        <div class="loading">Loading blog post...</div>
-      </section>
-    `
-    try {
-      const post = await fetchBlogPost(blogPostSlug)
-      const blogSection = app.querySelector('.blog-section')
-      blogSection.innerHTML = renderBlogPost(post)
-    } catch (error) {
-      console.error('Error:', error)
-      const blogSection = app.querySelector('.blog-section')
-      blogSection.innerHTML = '<div class="loading">Error loading blog post</div>'
-    }
+    await renderBlogPostPage(app, blogSlug)
+  } else {
+    // Default to home
+    await renderHomePage(app)
   }
+
+  // Prepend navigation to the page
+  const tempDiv = document.createElement('div')
+  tempDiv.innerHTML = pageContent
+  const nav = tempDiv.querySelector('nav')
+
+  // Remove old nav if it exists
+  const oldNav = document.querySelector('nav')
+  if (oldNav) {
+    oldNav.remove()
+  }
+
+  // Insert new nav at the beginning of body
+  document.body.insertBefore(nav, document.body.firstChild)
+
+  // Initialize mobile navigation after rendering
+  initMobileNav()
 }
 
 // Initialize the app

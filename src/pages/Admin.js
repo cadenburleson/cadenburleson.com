@@ -709,7 +709,7 @@ async function loadProjects() {
 
     try {
         const { data: projects, error } = await supabase
-            .from('projects')
+            .from('portfolio_projects')
             .select('*')
             .order('created_at', { ascending: false })
 
@@ -900,7 +900,7 @@ function setupProjectForm() {
                 // Update project to remove image URL
                 const projectId = form.querySelector('input[name="id"]').value
                 const { error: updateError } = await supabase
-                    .from('projects')
+                    .from('portfolio_projects')
                     .update({ image_url: null })
                     .eq('id', projectId)
 
@@ -1055,14 +1055,14 @@ function setupProjectForm() {
             if (isEditing) {
                 // Update existing project
                 const { error: updateError } = await supabase
-                    .from('projects')
+                    .from('portfolio_projects')
                     .update(projectData)
                     .eq('id', data.id)
                 error = updateError
             } else {
                 // Create new project
                 const { error: insertError } = await supabase
-                    .from('projects')
+                    .from('portfolio_projects')
                     .insert([projectData])
                 error = insertError
             }
@@ -1622,7 +1622,7 @@ function setupProjectButtons() {
         button.addEventListener('click', async () => {
             const id = button.dataset.id
             const { data: project, error } = await supabase
-                .from('projects')
+                .from('portfolio_projects')
                 .select('*')
                 .eq('id', id)
                 .single()
@@ -1646,7 +1646,7 @@ function setupProjectButtons() {
 
             try {
                 const { error } = await supabase
-                    .from('projects')
+                    .from('portfolio_projects')
                     .delete()
                     .eq('id', id)
 

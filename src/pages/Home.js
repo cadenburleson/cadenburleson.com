@@ -1,158 +1,137 @@
 import { supabase } from '../main.js';
 
 export async function renderHomePage(container) {
-  // Show loading state first
   container.innerHTML = `
-    <section class="intro-section">
-      <div class="intro-text">
-        From post-it notes to full on SaaS products, I have the skills to bring your ideas to life. 
-        I harness the newest technologies that are on the cutting edge of the industry. 
-        Soaking in the latest trends and best practices to deliver the best possible results.
+    <!-- Hero Section -->
+    <section class="rm-hero">
+      <div class="rm-hero-image">
+        <div class="rm-hero-overlay"></div>
       </div>
-      <div class="contact-block">
-        <a href="/contact">CONTACT</a>
+      <div class="rm-container">
+        <div class="rm-hero-content">
+          <h1 class="rm-hero-title">
+            Design products.<br>
+            Build experiences.<br>
+            Ship faster.
+          </h1>
+          <p class="rm-hero-description">
+            Creating digital experiences that solve real problems and delight users through thoughtful design and modern technology.
+          </p>
+          <div class="rm-hero-cta">
+            <a href="/projects" class="rm-btn rm-btn-primary">View Work</a>
+            <a href="/contact" class="rm-btn rm-btn-secondary">Get in Touch</a>
+          </div>
+        </div>
       </div>
     </section>
-    
-    <section id="projects-preview">
-      <h1 class="projects-heading">PROJECTS</h1>
-      <div id="featured-projects-container">
-        <div class="loading-indicator">Loading featured projects...</div>
+
+    <!-- Approach Section -->
+    <section class="rm-approach">
+      <div class="rm-container">
+        <div class="rm-section-header">
+          <h2 class="rm-section-title">Approach</h2>
+          <p class="rm-section-description">
+            Three pillars that drive exceptional design outcomes
+          </p>
+        </div>
+        <div class="rm-cards">
+          <div class="rm-card">
+            <div class="rm-card-label">Research</div>
+            <h3 class="rm-card-title">Understand the problem</h3>
+            <p class="rm-card-description">
+              Deep user research and market analysis to uncover insights that inform strategic design decisions.
+            </p>
+            <a href="#" class="rm-btn rm-btn-secondary rm-btn-small">Learn More</a>
+          </div>
+          <div class="rm-card">
+            <div class="rm-card-label">Design</div>
+            <h3 class="rm-card-title">Craft the solution</h3>
+            <p class="rm-card-description">
+              Iterate rapidly through prototypes and user testing to create intuitive, beautiful interfaces.
+            </p>
+            <a href="#" class="rm-btn rm-btn-secondary rm-btn-small">Learn More</a>
+          </div>
+          <div class="rm-card">
+            <div class="rm-card-label">Deliver</div>
+            <h3 class="rm-card-title">Build with precision</h3>
+            <p class="rm-card-description">
+              Work closely with development teams to ensure pixel-perfect implementation and seamless experiences.
+            </p>
+            <a href="#" class="rm-btn rm-btn-primary rm-btn-small">Learn More</a>
+          </div>
+        </div>
       </div>
-      <div class="view-all-projects">
-        <a href="/projects">VIEW ALL PROJECTS</a>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="rm-impact">
+      <div class="rm-container">
+        <div class="rm-impact-content">
+          <div class="rm-impact-text">
+            <h2 class="rm-impact-title">Designing for impact</h2>
+            <p class="rm-impact-description">
+              Every project is an opportunity to create meaningful change. From early-stage startups to established companies, I partner with teams to transform complex challenges into simple, elegant solutions.
+            </p>
+            <p class="rm-impact-description">
+              My work spans web applications, mobile experiences, and design systems—always with a focus on usability, accessibility, and business outcomes.
+            </p>
+          </div>
+          <div class="rm-impact-visual">
+            <div class="rm-impact-image"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work Section -->
+    <section class="rm-work">
+      <div class="rm-container">
+        <div class="rm-section-header">
+          <h2 class="rm-section-title">Selected Work</h2>
+          <p class="rm-section-description">
+            Recent projects that showcase my approach to design
+          </p>
+        </div>
+        <div class="rm-work-grid">
+          <a href="/projects" class="rm-work-item">
+            <div class="rm-work-image"></div>
+            <div class="rm-work-info">
+              <h3 class="rm-work-title">E-commerce Platform</h3>
+              <p class="rm-work-description">End-to-end redesign increasing conversion by 40%</p>
+            </div>
+          </a>
+          <a href="/projects" class="rm-work-item">
+            <div class="rm-work-image"></div>
+            <div class="rm-work-info">
+              <h3 class="rm-work-title">Mobile Banking App</h3>
+              <p class="rm-work-description">Simplified financial management for modern users</p>
+            </div>
+          </a>
+          <a href="/projects" class="rm-work-item">
+            <div class="rm-work-image"></div>
+            <div class="rm-work-info">
+              <h3 class="rm-work-title">Design System</h3>
+              <p class="rm-work-description">Scalable component library for enterprise software</p>
+            </div>
+          </a>
+        </div>
+        <div class="rm-work-cta">
+          <a href="/projects" class="rm-btn rm-btn-primary">View All Projects</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="rm-cta">
+      <div class="rm-container">
+        <div class="rm-cta-content">
+          <h2 class="rm-cta-title">Let's build something together</h2>
+          <p class="rm-cta-description">
+            Currently available for select projects and collaborations
+          </p>
+          <a href="/contact" class="rm-btn rm-btn-primary rm-btn-large">Start a Conversation</a>
+        </div>
       </div>
     </section>
   `;
-
-  // Add minimal interactivity
-  const contactLink = container.querySelector('.contact-block a');
-  if (contactLink) {
-    contactLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.history.pushState({}, '', '/contact');
-      document.dispatchEvent(new CustomEvent('route-changed'));
-    });
-  }
-
-  // Load featured projects
-  await loadFeaturedProjects(container);
-}
-
-async function loadFeaturedProjects(container) {
-  const projectsContainer = container.querySelector('#featured-projects-container');
-
-  try {
-    let projects = [];
-
-    // Check if supabase is initialized before trying to use it
-    if (supabase) {
-      console.log('Fetching projects from Supabase for homepage');
-
-      // Use the same query as Projects.js but add the featured filter
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('featured', true)  // Only get featured projects
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching featured projects from Supabase:', error);
-        throw error;
-      }
-
-      projects = data || [];
-      console.log(`Found ${projects.length} featured projects in database`);
-    } else {
-      console.warn('Supabase not initialized');
-    }
-
-    // Process projects exactly like in Projects.js
-    projects = projects.map(project => {
-      // Handle different technology formats
-      let technologies = [];
-      if (project.technologies) {
-        if (Array.isArray(project.technologies)) {
-          technologies = project.technologies;
-        } else if (typeof project.technologies === 'string') {
-          try {
-            // Try parsing as JSON first
-            technologies = JSON.parse(project.technologies);
-          } catch (e) {
-            // If not valid JSON, assume comma-separated string
-            technologies = project.technologies.split(',').map(t => t.trim());
-          }
-        }
-      }
-
-      return {
-        ...project,
-        technologies,
-        // Ensure these properties have defaults and proper formatting
-        image_url: project.image_url || '/images/placeholder.svg',
-        category: (project.category || 'Project').toUpperCase(),
-        title: (project.title || 'Project').toUpperCase(),
-        description: (project.description || '').toUpperCase()
-      };
-    });
-
-    // If no projects found, show a message
-    if (projects.length === 0) {
-      projectsContainer.innerHTML = `
-        <div class="no-projects-message">
-          <p>No featured projects available yet.</p>
-        </div>
-      `;
-      return;
-    }
-
-    // Force grid layout
-    const style = `
-      <style>
-        #featured-projects-container .project-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: var(--spacing-md);
-        }
-        
-        @media (max-width: 900px) {
-          #featured-projects-container .project-grid {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          }
-        }
-        
-        @media (max-width: 600px) {
-          #featured-projects-container .project-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      </style>
-    `;
-
-    // Create project cards for all featured projects
-    projectsContainer.innerHTML = style + `
-      <div class="project-grid">
-        ${projects.map(project => `
-          <div class="project-card">
-            <img src="${project.image_url}" alt="${project.title}" class="project-card-image">
-            <div class="card-label">${project.category}</div>
-            <div class="project-card-content">
-              <div class="project-title">${project.title}</div>
-              <div class="project-description">${project.description}</div>
-              <a href="/projects/${project.slug}" class="project-link">VIEW PROJECT</a>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `;
-
-  } catch (error) {
-    console.error('Error loading featured projects:', error);
-    projectsContainer.innerHTML = `
-      <div class="error-message">
-        <p>Failed to load featured projects. Please try again later.</p>
-        <p>Error details: ${error.message}</p>
-      </div>
-    `;
-  }
 } 
