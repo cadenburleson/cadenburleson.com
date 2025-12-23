@@ -35,142 +35,73 @@ export async function renderProjectDetailPage(container, slug) {
         // If supabase is not initialized or project doesn't exist in database, use mockup data
         if (!project) {
             const mockProjects = {
-                'ecommerce-platform': {
+                'fitnitapp': {
                     id: 1,
-                    slug: 'ecommerce-platform',
-                    title: 'Modern E-commerce Platform',
-                    category: 'Web Application',
-                    description: 'Led complete redesign of checkout flow for a fashion retail brand, reducing cart abandonment by 45% and increasing conversion rate by 40%.',
-                    full_description: `This project involved a comprehensive redesign of the entire checkout experience for a major fashion retail brand. Through extensive user research and A/B testing, we identified key friction points in the purchase journey and systematically addressed each one.
-
-The redesign introduced one-click purchasing for returning customers, a streamlined guest checkout option that reduced form fields by 60%, and real-time inventory updates to prevent disappointment at checkout. We also implemented smart address validation and autocomplete features to speed up the process.
-
-The results exceeded expectations: cart abandonment dropped by 45%, conversion rates increased by 40%, and average checkout time was reduced from 4.5 minutes to under 2 minutes. Customer satisfaction scores for the checkout process improved from 3.2 to 4.7 out of 5.`,
-                    image_url: '/images/placeholder.svg',
-                    gallery: [
-                        '/images/placeholder.svg',
-                        '/images/placeholder.svg',
-                        '/images/placeholder.svg'
-                    ],
-                    technologies: ['React', 'Node.js', 'Stripe', 'PostgreSQL', 'Redis'],
-                    features: [
-                        'One-click purchasing for returning customers',
-                        'Streamlined guest checkout with minimal form fields',
-                        'Real-time inventory updates and availability checking',
-                        'Smart address validation and autocomplete',
-                        'Multiple payment method support',
-                        'Progressive checkout with save & continue later',
-                        'Mobile-optimized responsive design'
-                    ],
-                    demo_url: null,
-                    github_url: null,
-                    launch_date: '2024-03-15',
-                    year: '2024'
-                },
-                'mobile-banking': {
-                    id: 2,
-                    slug: 'mobile-banking',
-                    title: 'Neo Banking App',
+                    slug: 'fitnitapp',
+                    title: 'FitNit App',
                     category: 'Mobile',
-                    description: 'Designed and built a mobile-first banking experience for millennials and Gen Z. Used by 50,000+ active users.',
-                    full_description: `A next-generation mobile banking app built from the ground up for digital natives. The app reimagines traditional banking with features designed for how young people actually manage money today.
+                    description: 'Comprehensive fitness and nutrition tracking app that helps users achieve their health goals. Features workout logging, meal tracking, progress analytics, and personalized recommendations.',
+                    full_description: `FitNit App is a comprehensive fitness and nutrition tracking platform designed to help users take control of their health journey. The app combines intuitive workout logging with detailed nutrition tracking to provide a complete picture of your daily wellness.
 
-Key features include instant peer-to-peer transfers, intelligent bill splitting for group expenses, automated savings goals with visual progress tracking, and spending insights powered by machine learning. The app analyzes spending patterns and provides actionable recommendations for saving money.
+The workout tracking system allows users to log exercises with sets, reps, and weights, while also supporting cardio activities with distance and duration tracking. AI-powered form analysis provides real-time feedback to help prevent injuries and optimize results.
 
-The design emphasizes transparency and control, with real-time notifications for every transaction, customizable spending limits by category, and no hidden fees. Security features include biometric authentication, instant card freeze/unfreeze, and virtual card numbers for online shopping.
+On the nutrition side, users can easily log meals using a barcode scanner, food search, or AI-powered photo recognition. The app calculates macros and micronutrients, tracks water intake, and provides personalized meal recommendations based on fitness goals.
 
-Since launch, the app has grown to over 50,000 active users with an average app store rating of 4.8/5.0.`,
-                    image_url: '/images/placeholder.svg',
+Progress analytics visualize your journey over time with detailed charts showing weight trends, strength gains, and nutrition habits. The app learns from your patterns to provide increasingly personalized recommendations.`,
+                    image_url: 'https://fitnitapp.com/assets/feature-image.jpg',
                     gallery: [
-                        '/images/placeholder.svg',
-                        '/images/placeholder.svg',
-                        '/images/placeholder.svg'
+                        'https://fitnitapp.com/assets/feature-image.jpg'
                     ],
-                    technologies: ['React Native', 'TypeScript', 'Firebase', 'Plaid'],
+                    technologies: ['React Native', 'Node.js', 'PostgreSQL', 'OpenAI'],
                     features: [
-                        'Instant P2P money transfers',
-                        'Smart bill splitting for group expenses',
-                        'Automated savings goals with visual tracking',
-                        'AI-powered spending insights and budgeting',
-                        'Real-time transaction notifications',
-                        'Biometric authentication (Face ID / Touch ID)',
-                        'Virtual cards for secure online shopping',
-                        'Zero hidden fees'
+                        'Comprehensive workout logging with exercise library',
+                        'AI-powered nutrition tracking with photo recognition',
+                        'Barcode scanner for easy food logging',
+                        'Macro and micronutrient tracking',
+                        'Progress analytics with visual charts',
+                        'Personalized workout and meal recommendations',
+                        'Water intake tracking',
+                        'Goal setting and progress milestones'
                     ],
-                    demo_url: null,
+                    demo_url: 'https://fitnitapp.com',
                     github_url: null,
-                    launch_date: '2024-01-20',
+                    launch_date: '2024-06-01',
                     year: '2024'
                 },
-                'design-system': {
-                    id: 3,
-                    slug: 'design-system',
-                    title: 'Horizon Design System',
-                    category: 'Design System',
-                    description: 'Created comprehensive design system for SaaS company with 15+ product teams. Reduced development time by 60%.',
-                    full_description: `Horizon is a comprehensive design system created to unify the user experience across a family of SaaS products. When I joined, each product team was building components from scratch, leading to inconsistent experiences and duplicated effort.
-
-The system includes over 200 components, from basic buttons and inputs to complex data tables and charts. Each component is built with accessibility in mind (WCAG 2.1 AA compliant), includes dark mode support, and is fully documented with usage guidelines and code examples.
-
-A key innovation was our token-based theming system, which allows each product to maintain brand identity while staying consistent with core interaction patterns. We also built a Figma plugin that keeps design files in sync with the code, ensuring designers always work with production-ready components.
-
-The impact has been dramatic: development time for new features decreased by 60%, design-to-development handoff issues dropped by 80%, and accessibility audit scores improved from an average of 72% to 94%.`,
-                    image_url: '/images/placeholder.svg',
-                    gallery: [
-                        '/images/placeholder.svg',
-                        '/images/placeholder.svg',
-                        '/images/placeholder.svg'
-                    ],
-                    technologies: ['Figma', 'React', 'Storybook', 'Design Tokens', 'TypeScript'],
-                    features: [
-                        '200+ production-ready components',
-                        'WCAG 2.1 AA accessibility compliance',
-                        'Dark mode support for all components',
-                        'Token-based theming system',
-                        'Figma design kit with sync plugin',
-                        'Comprehensive documentation and usage guidelines',
-                        'Automated visual regression testing',
-                        'TypeScript support with full type definitions'
-                    ],
-                    demo_url: null,
-                    github_url: null,
-                    launch_date: '2023-09-10',
-                    year: '2023'
-                },
-                'saas-dashboard': {
-                    id: 4,
-                    slug: 'saas-dashboard',
-                    title: 'Analytics Dashboard',
+                'hard-ship': {
+                    id: 2,
+                    slug: 'hard-ship',
+                    title: 'Hard-Ship',
                     category: 'Web Application',
-                    description: 'Built real-time analytics platform processing 10M+ events daily. Helping 200+ businesses make data-driven decisions.',
-                    full_description: `A powerful real-time analytics platform designed for businesses that need to make fast, data-driven decisions. The platform processes over 10 million events per day and provides insights with sub-second latency.
+                    description: 'Challenging endurance and adventure platform designed to push users beyond their limits. Track expeditions, compete in challenges, and connect with a community of adventure seekers.',
+                    full_description: `Hard-Ship is a platform built for those who seek to push beyond their comfort zones. Whether you're training for an ultra-marathon, planning a mountain expedition, or simply want to challenge yourself with daily hardship tasks, this platform provides the tools and community to help you succeed.
 
-The dashboard features custom data visualization tools built with D3.js, allowing users to create exactly the charts and reports they need. Collaborative workspaces enable teams to share insights, annotate findings, and build shared understanding of key metrics.
+The expedition tracking feature allows users to plan and document multi-day adventures with GPS mapping, checkpoint logging, and real-time progress sharing. Friends and family can follow along as you conquer new challenges.
 
-Automated reporting sends scheduled updates to stakeholders, with smart alerts that notify teams when metrics deviate from expected ranges. The platform also includes a powerful query builder that lets non-technical users explore data without writing SQL.
+The challenge system offers everything from daily cold plunge streaks to month-long fitness challenges. Compete on leaderboards, earn achievement badges, and join teams to tackle group challenges together.
 
-Today, over 200 businesses rely on the platform to track everything from marketing performance to operational efficiency. Users report that data-driven decisions now happen 3x faster than before.`,
+At its core, Hard-Ship is about building mental and physical resilience. The platform includes guided programs for developing discipline, tracking habits, and progressively increasing your capacity for discomfort. Join a community of like-minded individuals who believe that voluntary hardship is the path to growth.`,
                     image_url: '/images/placeholder.svg',
                     gallery: [
                         '/images/placeholder.svg',
                         '/images/placeholder.svg',
                         '/images/placeholder.svg'
                     ],
-                    technologies: ['Vue.js', 'D3.js', 'GraphQL', 'AWS', 'Lambda'],
+                    technologies: ['Next.js', 'Supabase', 'Tailwind CSS', 'Mapbox'],
                     features: [
-                        'Real-time event processing (10M+ events/day)',
-                        'Custom data visualizations with D3.js',
-                        'Collaborative workspaces for team insights',
-                        'Automated scheduled reporting',
-                        'Smart metric alerts and anomaly detection',
-                        'Visual query builder for non-technical users',
-                        'API for custom integrations',
-                        'Role-based access control'
+                        'GPS expedition tracking and mapping',
+                        'Daily and monthly challenge system',
+                        'Leaderboards and achievement badges',
+                        'Team challenges and group competitions',
+                        'Habit tracking for building discipline',
+                        'Progress sharing with friends and family',
+                        'Guided resilience programs',
+                        'Community forums and adventure groups'
                     ],
-                    demo_url: null,
+                    demo_url: 'https://hard-ship.com',
                     github_url: null,
-                    launch_date: '2023-06-18',
-                    year: '2023'
+                    launch_date: '2024-08-15',
+                    year: '2024'
                 }
             };
 

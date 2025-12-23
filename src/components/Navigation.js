@@ -2,7 +2,7 @@ export function renderNavigation(currentPath) {
   const nav = document.createElement('header');
   nav.innerHTML = `
     <div class="logo">
-      <a href="/">CADEN<br>BURLESON</a>
+      <a href="/">Caden Burleson</a>
     </div>
     <nav>
       <ul>

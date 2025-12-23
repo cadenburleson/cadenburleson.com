@@ -19,7 +19,7 @@ function renderNav() {
       <div class="nav-content">
         <a href="/" class="nav-logo">
           <span class="logo-icon"></span>
-          <span class="logo-text">Devanta<br/>Ebison</span>
+          <span class="logo-text">Caden Burleson</span>
         </a>
         <button class="nav-hamburger" aria-label="Toggle navigation menu">
           <span class="hamburger-line"></span>
