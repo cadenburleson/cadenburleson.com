@@ -17,7 +17,7 @@ export async function renderHomePage(container) {
             Transform ideas into high-converting digital experiences
           </p>
           <p class="rm-hero-description">
-            I partner with ambitious teams to design and build products that users love. From concept to launch, get pixel-perfect interfaces that drive real business results—without the endless revisions.
+            I partner with ambitious teams to design and build products that users love. From concept to launch, get pixel-perfect interfaces that drive real business results.
           </p>
           <div class="rm-hero-cta">
             <a href="/projects" class="rm-btn rm-btn-primary">
@@ -30,19 +30,33 @@ export async function renderHomePage(container) {
             </a>
           </div>
 
-          <!-- Hero Visual/Mockup -->
-          <div class="rm-hero-visual">
-            <div class="visual-card visual-card-1">
-              <div class="card-icon">🎨</div>
-              <div class="card-label">Design</div>
-            </div>
-            <div class="visual-card visual-card-2">
-              <div class="card-icon">⚙️</div>
-              <div class="card-label">Build</div>
-            </div>
-            <div class="visual-card visual-card-3">
-              <div class="card-icon">📈</div>
-              <div class="card-label">Scale</div>
+          <!-- Project Showcase -->
+          <div class="rm-hero-showcase">
+            <div class="showcase-grid">
+              <a href="/projects/dungindragin" class="showcase-item">
+                <div class="showcase-image" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%), url('https://www.dungindragin.com/og-image.png') center/cover;">
+                  <div class="showcase-overlay">
+                    <div class="showcase-title">DunginDragin</div>
+                    <div class="showcase-category">AI Game Platform</div>
+                  </div>
+                </div>
+              </a>
+              <a href="/projects/fitnitapp" class="showcase-item">
+                <div class="showcase-image" style="background: linear-gradient(135deg, rgba(240, 147, 251, 0.9) 0%, rgba(245, 87, 108, 0.9) 100%), url('/images/fitnit-promo.png') center/cover;">
+                  <div class="showcase-overlay">
+                    <div class="showcase-title">FitNit</div>
+                    <div class="showcase-category">Mobile App</div>
+                  </div>
+                </div>
+              </a>
+              <a href="/projects/hard-ship" class="showcase-item">
+                <div class="showcase-image" style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.95) 0%, rgba(0, 242, 254, 0.95) 100%), url('https://hard-ship.com/og-image.png') center/cover;">
+                  <div class="showcase-overlay">
+                    <div class="showcase-title">Hard-Ship</div>
+                    <div class="showcase-category">Web Platform</div>
+                  </div>
+                </div>
+              </a>
             </div>
           </div>
         </div>
@@ -197,6 +211,66 @@ export async function renderHomePage(container) {
             <div class="benefit-icon gradient-warm">📈</div>
             <h3 class="benefit-title">Increase Conversions</h3>
             <p class="benefit-description">Every pixel is designed to convert. Expect higher engagement, lower bounce rates, and better metrics.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="rm-pricing">
+      <div class="rm-container">
+        <div class="rm-section-header">
+          <h2 class="rm-section-title">Simple, Transparent Pricing</h2>
+          <p class="rm-section-description">
+            One flat monthly rate. Unlimited requests. Pause or cancel anytime.
+          </p>
+        </div>
+        <div class="pricing-content">
+          <div class="pricing-card">
+            <div class="pricing-badge">Most Popular</div>
+            <div class="pricing-header">
+              <h3 class="pricing-plan-name">Monthly Subscription</h3>
+              <div class="pricing-amount">
+                <span class="pricing-currency">$</span>
+                <span class="pricing-price">4,999</span>
+                <span class="pricing-period">/month</span>
+              </div>
+            </div>
+            <div class="pricing-features">
+              <div class="pricing-feature">
+                <span class="pricing-feature-icon">✓</span>
+                <span class="pricing-feature-text">One request at a time</span>
+              </div>
+              <div class="pricing-feature">
+                <span class="pricing-feature-icon">✓</span>
+                <span class="pricing-feature-text">Avg. 48 hour delivery</span>
+              </div>
+              <div class="pricing-feature">
+                <span class="pricing-feature-icon">✓</span>
+                <span class="pricing-feature-text">Unlimited monthly requests</span>
+              </div>
+              <div class="pricing-feature">
+                <span class="pricing-feature-icon">✓</span>
+                <span class="pricing-feature-text">Pause or cancel anytime</span>
+              </div>
+            </div>
+            <a href="/contact" class="rm-btn rm-btn-primary rm-btn-large pricing-cta">
+              Get Started
+            </a>
+          </div>
+          <div class="pricing-quotes">
+            <blockquote class="pricing-quote">
+              <div class="quote-icon">💰</div>
+              <p class="quote-text">Half the price of a senior developer—without the overhead, benefits, or office space.</p>
+            </blockquote>
+            <blockquote class="pricing-quote">
+              <div class="quote-icon">🔓</div>
+              <p class="quote-text">No contracts. No lock-in. Cancel anytime with zero hassle.</p>
+            </blockquote>
+            <blockquote class="pricing-quote">
+              <div class="quote-icon">⚡</div>
+              <p class="quote-text">Scale up or pause when you need. Total flexibility for your business.</p>
+            </blockquote>
           </div>
         </div>
       </div>

@@ -32,6 +32,9 @@ function renderNav() {
           <li><a href="/blog">Blog</a></li>
           <li><a href="/contact">Contact</a></li>
         </ul>
+        <a href="https://cal.com/cadenburleson" target="_blank" rel="noopener noreferrer" class="nav-cta">
+          Book a Call
+        </a>
       </div>
     </nav>
   `
@@ -41,6 +44,7 @@ function renderNav() {
 function initMobileNav() {
   const hamburger = document.querySelector('.nav-hamburger')
   const navLinks = document.querySelector('.nav-links')
+  const navCta = document.querySelector('.nav-cta')
 
   if (hamburger && navLinks) {
     hamburger.addEventListener('click', () => {
@@ -58,6 +62,15 @@ function initMobileNav() {
         document.body.classList.remove('nav-open')
       })
     })
+
+    // Close menu when clicking CTA button
+    if (navCta) {
+      navCta.addEventListener('click', () => {
+        hamburger.classList.remove('active')
+        navLinks.classList.remove('active')
+        document.body.classList.remove('nav-open')
+      })
+    }
   }
 }
 
@@ -254,6 +267,9 @@ export { supabase }
 
 // Handle routing
 async function handleRoute() {
+  // Always scroll to top on route change
+  window.scrollTo(0, 0)
+
   const app = document.querySelector('#app')
   const path = window.location.pathname
   const projectSlug = path.match(/^\/projects\/([^/]+)/)?.[1]
@@ -306,8 +322,16 @@ async function handleRoute() {
   initMobileNav()
 }
 
+// Disable automatic scroll restoration
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual'
+}
+
 // Initialize the app
-document.addEventListener('DOMContentLoaded', handleRoute)
+document.addEventListener('DOMContentLoaded', () => {
+  window.scrollTo(0, 0)
+  handleRoute()
+})
 
 // Handle navigation
 document.addEventListener('click', (e) => {

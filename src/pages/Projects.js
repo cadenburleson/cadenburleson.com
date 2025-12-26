@@ -41,6 +41,17 @@ export async function renderProjectsPage(container) {
       projects = [
         {
           id: 1,
+          slug: 'dungindragin',
+          title: 'DunginDragin',
+          category: 'Game',
+          description: 'AI-powered Dungeons & Dragons adventure platform with infinite procedurally generated worlds. Create characters, explore diverse biomes, and experience dynamic storytelling that adapts to your every decision.',
+          image_url: '/project-placeholder.jpg',
+          technologies: ['Google Gemini AI', 'React', 'Node.js'],
+          demo_url: 'https://www.dungindragin.com',
+          year: '2024'
+        },
+        {
+          id: 2,
           slug: 'fitnitapp',
           title: 'FitNit App',
           category: 'Mobile',
@@ -50,7 +61,7 @@ export async function renderProjectsPage(container) {
           year: '2024'
         },
         {
-          id: 2,
+          id: 3,
           slug: 'hard-ship',
           title: 'Hard-Ship',
           category: 'Web Application',

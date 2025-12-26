@@ -35,6 +35,39 @@ export async function renderProjectDetailPage(container, slug) {
         // If supabase is not initialized or project doesn't exist in database, use mockup data
         if (!project) {
             const mockProjects = {
+                'dungindragin': {
+                    id: 1,
+                    slug: 'dungindragin',
+                    title: 'DunginDragin',
+                    category: 'Game',
+                    description: 'AI-powered Dungeons & Dragons adventure platform with infinite procedurally generated worlds. Create characters, explore diverse biomes, and experience dynamic storytelling that adapts to your every decision.',
+                    full_description: `DunginDragin is your personal AI Dungeon Master, powered by Google's Gemini AI. Embark on infinite procedurally generated adventures where every choice shapes your journey. The platform combines classic D&D gameplay with cutting-edge AI to create unique narratives that respond dynamically to player decisions.
+
+The procedural world generation creates endless possibilities with diverse biomes ranging from dark dungeons to mystical forests. Every tile reveals new adventures, ensuring no two playthroughs are ever the same. The AI Dungeon Master adapts the story based on your choices, creating a truly personalized adventure experience.
+
+The item discovery system lets you find legendary weapons, magical artifacts, and valuable treasures throughout your journey. Build your collection, trade in the marketplace, and equip your character with powerful gear to overcome greater challenges.
+
+Best of all, DunginDragin is completely free to play, offering unlimited adventures at no cost. Create your hero and dive into an adventure where anything is possible.`,
+                    image_url: '/project-placeholder.jpg',
+                    gallery: [
+                        '/project-placeholder.jpg'
+                    ],
+                    technologies: ['Google Gemini AI', 'React', 'Node.js'],
+                    features: [
+                        'Infinite procedurally generated worlds with diverse biomes',
+                        'AI-powered dynamic storytelling that adapts to player choices',
+                        'Character creation and customization system',
+                        'Item discovery with legendary weapons and magical artifacts',
+                        'Marketplace for trading treasures',
+                        'Free to play with unlimited adventures',
+                        'Responsive narrative that shapes based on every decision',
+                        'Seamless integration of classic D&D mechanics with AI technology'
+                    ],
+                    demo_url: 'https://www.dungindragin.com',
+                    github_url: null,
+                    launch_date: '2024-01-01',
+                    year: '2024'
+                },
                 'fitnitapp': {
                     id: 1,
                     slug: 'fitnitapp',
